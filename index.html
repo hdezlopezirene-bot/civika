@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Superapp  Municipal - CiviKa</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Superapp Municipal</title>
     <style>
         * {
             margin: 0;
@@ -17,542 +16,316 @@
             --primary-blue: #0096ff;
             --dark-blue: #0047ab;
             --light-blue: #66b3ff;
-            --civika-primary: #0b67d0;
-            --civika-accent: #00b67a;
-            --civika-gradient: linear-gradient(135deg, #0b67d0, #00b67a);
             --bg-dark: #0f0c19;
-            --bg-light: #f8faff;
-            --text-dark: #1a237e;
-            --text-light: #e8eaf6;
-            --card-bg-dark: rgba(255, 255, 255, 0.08);
-            --card-bg-light: rgba(255, 255, 255, 0.9);
-            --success: #00c853;
-            --warning: #ff9800;
-            --danger: #f44336;
-            --shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            --shadow-hover: 0 12px 35px rgba(0, 0, 0, 0.25);
+            --bg-light: #f5f5f5;
+            --text-dark: #333;
+            --text-light: #fff;
+            --card-bg: rgba(0, 0, 0, 0.05);
         }
 
         body {
-            background: var(--bg-dark);
+            background: var(--bg-light);
             min-height: 100vh;
-            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
             overflow-x: hidden;
-            transition: all 0.4s ease;
+            color: var(--text-dark);
+            transition: background 0.3s ease;
         }
 
-        body.light-mode {
-            background: var(--bg-light);
-            color: var(--text-dark);
+        body.dark-mode {
+            background: var(--bg-dark);
+            color: var(--text-light);
         }
 
         .app-container {
             width: 100vw;
             height: 100vh;
-            background: var(--bg-dark);
+            background: var(--bg-light);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             position: relative;
+            transition: background 0.3s ease;
         }
 
-        body.light-mode .app-container {
-            background: var(--bg-light);
+        body.dark-mode .app-container {
+            background: var(--bg-dark);
         }
 
-        /* Barra superior mejorada */
+        /* Barra superior con búsqueda y menú hamburguesa */
         .top-bar {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 12px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-shrink: 0;
             position: sticky;
             top: 0;
-            z-index: 100;
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            transition: background 0.3s ease;
         }
 
-        body.light-mode .top-bar {
-            background: rgba(255, 255, 255, 0.9);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        body.dark-mode .top-bar {
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        /* Logo CiviKa mejorado */
+        /* Logo CiviKa */
         .civika-brand {
             display: flex;
             align-items: center;
             margin-right: 15px;
-            position: relative;
-            cursor: pointer;
         }
 
         .civika-logo {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: var(--civika-gradient);
+            background: linear-gradient(135deg, #0b67d0, #00b67a);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 800;
-            font-size: 20px;
-            margin-right: 12px;
+            font-size: 18px;
+            margin-right: 10px;
             flex-shrink: 0;
-            box-shadow: 0 6px 20px rgba(11, 103, 208, 0.4);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
             overflow: hidden;
         }
 
-        .civika-logo::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: rotate(45deg);
-            transition: all 0.8s ease;
-        }
-
-        .civika-brand:hover .civika-logo::before {
-            transform: rotate(45deg) translate(50%, 50%);
-        }
-
-        .civika-brand:hover .civika-logo {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 8px 25px rgba(11, 103, 208, 0.6);
+        .civika-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .civika-text {
-            font-size: 22px;
-            font-weight: 800;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
             white-space: nowrap;
-            background: var(--civika-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 2px 10px rgba(11, 103, 208, 0.3);
         }
 
-        body.light-mode .civika-text {
-            background: var(--civika-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Barra de búsqueda mejorada */
-        .search-container {
-            flex: 1;
-            margin: 0 20px;
-            max-width: 500px;
-            position: relative;
+        body.dark-mode .civika-text {
+            color: var(--text-light);
         }
 
         .search-bar {
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 25px;
-            padding: 14px 20px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            padding: 10px 15px;
             display: flex;
             align-items: center;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin-right: 15px;
+            transition: background 0.3s ease;
         }
 
-        body.light-mode .search-bar {
-            background: rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .search-bar:focus-within {
-            background: rgba(255, 255, 255, 0.18);
-            border-color: rgba(11, 103, 208, 0.6);
-            box-shadow: 0 0 0 3px rgba(11, 103, 208, 0.15), 0 6px 20px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
-        }
-
-        body.light-mode .search-bar:focus-within {
-            background: rgba(0, 0, 0, 0.08);
-            border-color: rgba(11, 103, 208, 0.4);
+        body.dark-mode .search-bar {
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .search-icon {
-            color: var(--text-light);
-            margin-right: 12px;
-            font-size: 18px;
-            transition: all 0.3s ease;
+            color: var(--text-dark);
+            margin-right: 8px;
+            font-size: 16px;
+            transition: color 0.3s ease;
         }
 
-        body.light-mode .search-icon {
-            color: var(--text-dark);
+        body.dark-mode .search-icon {
+            color: var(--text-light);
         }
 
         .search-input {
             background: transparent;
             border: none;
-            color: var(--text-light);
+            color: var(--text-dark);
             font-size: 16px;
             width: 100%;
             outline: none;
-            font-weight: 500;
+            transition: color 0.3s ease;
         }
 
-        body.light-mode .search-input {
-            color: var(--text-dark);
+        body.dark-mode .search-input {
+            color: var(--text-light);
         }
 
         .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 400;
-        }
-
-        body.light-mode .search-input::placeholder {
             color: rgba(0, 0, 0, 0.6);
         }
 
-        /* Menú hamburguesa mejorado */
+        body.dark-mode .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
         .menu-icon {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             cursor: pointer;
             position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .menu-icon:hover {
-            transform: scale(1.1);
         }
 
         .menu-icon span {
             display: block;
             width: 100%;
             height: 3px;
-            background: var(--text-light);
-            border-radius: 3px;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            transform-origin: center;
-        }
-
-        body.light-mode .menu-icon span {
             background: var(--text-dark);
+            border-radius: 2px;
+            transition: all 0.3s ease;
         }
 
-        .menu-icon.active span:nth-child(1) {
-            transform: translateY(11px) rotate(45deg);
+        body.dark-mode .menu-icon span {
+            background: var(--text-light);
         }
 
-        .menu-icon.active span:nth-child(2) {
-            opacity: 0;
-            transform: scale(0);
-        }
-
-        .menu-icon.active span:nth-child(3) {
-            transform: translateY(-11px) rotate(-45deg);
-        }
-
-        /* Menú desplegable mejorado */
+        /* Menú desplegable hamburguesa */
         .hamburger-menu {
             position: absolute;
             top: 100%;
-            right: 20px;
-            background: var(--bg-dark);
-            border-radius: 18px;
-            padding: 15px;
-            box-shadow: var(--shadow-hover);
-            z-index: 1000;
+            right: 15px;
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 20;
             display: none;
             flex-direction: column;
-            min-width: 200px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transform: translateY(10px);
-            opacity: 0;
-            transition: all 0.3s ease;
+            min-width: 150px;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode .hamburger-menu {
+            background: var(--bg-dark);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .hamburger-menu.active {
             display: flex;
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        body.light-mode .hamburger-menu {
-            background: var(--card-bg-light);
-            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .hamburger-item {
             display: flex;
             align-items: center;
-            padding: 12px 15px;
-            border-radius: 12px;
+            padding: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--text-light);
-            margin-bottom: 5px;
-        }
-
-        body.light-mode .hamburger-item {
+            transition: background 0.3s ease;
             color: var(--text-dark);
         }
 
-        .hamburger-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateX(5px);
+        body.dark-mode .hamburger-item {
+            color: var(--text-light);
         }
 
-        body.light-mode .hamburger-item:hover {
+        .hamburger-item:hover {
             background: rgba(0, 0, 0, 0.05);
         }
 
+        body.dark-mode .hamburger-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .hamburger-item i {
-            margin-right: 12px;
+            margin-right: 10px;
             font-size: 18px;
-            width: 24px;
-            text-align: center;
         }
 
-        .hamburger-item:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Contenido principal mejorado */
+        /* Contenido principal - 3/4 de la pantalla */
         .main-scrollable {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            scroll-behavior: smooth;
-        }
-
-        .main-scrollable::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .main-scrollable::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .main-scrollable::-webkit-scrollbar-thumb {
-            background: var(--civika-primary);
-            border-radius: 10px;
-        }
-
-        .main-scrollable::-webkit-scrollbar-thumb:hover {
-            background: var(--civika-accent);
-        }
-
-        /* Banner de bienvenida mejorado */
-        .welcome-banner {
-            background: var(--civika-gradient);
-            border-radius: 24px;
-            padding: 30px;
-            margin-bottom: 10px;
-            color: white;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .welcome-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-            animation: pulse 6s infinite ease-in-out;
-        }
-
-        .welcome-content h2 {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 2;
-        }
-
-        .welcome-content p {
-            font-size: 16px;
-            opacity: 0.95;
-            margin-bottom: 25px;
-            position: relative;
-            z-index: 2;
-            line-height: 1.5;
-        }
-
-        .welcome-stats {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .stat {
-            text-align: center;
-            flex: 1;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 15px;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .stat:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .stat-number {
-            display: block;
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 13px;
-            opacity: 0.9;
-            font-weight: 600;
+            gap: 15px;
+            padding-bottom: 80px; /* Espacio para el menú inferior */
         }
 
         /* Contenido principal */
         .main-content {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             flex: 0 0 auto;
-            animation: fadeIn 0.8s ease-out 0.2s both;
         }
 
-        /* Menú lateral mejorado */
+        /* Menú lateral */
         .sidebar {
-            background: var(--card-bg-dark);
-            border-radius: 20px;
-            padding: 20px 15px;
-            width: 100px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px 10px;
+            width: 90px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease;
         }
 
-        body.light-mode .sidebar {
-            background: var(--card-bg-light);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+        body.dark-mode .sidebar {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px 10px;
-            border-radius: 16px;
-            margin-bottom: 10px;
+            padding: 10px 5px;
+            border-radius: 10px;
+            margin-bottom: 8px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            color: var(--text-light);
+            transition: all 0.3s ease;
+            color: var(--text-dark);
             font-size: 12px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
         }
 
-        body.light-mode .sidebar-item {
-            color: var(--text-dark);
-        }
-
-        .sidebar-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            transition: left 0.6s;
-        }
-
-        .sidebar-item:hover::before {
-            left: 100%;
+        body.dark-mode .sidebar-item {
+            color: var(--text-light);
         }
 
         .sidebar-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        body.light-mode .sidebar-item:hover {
             background: rgba(0, 0, 0, 0.05);
         }
 
+        body.dark-mode .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .sidebar-item.active {
-            background: var(--civika-gradient);
+            background: var(--primary-blue);
             color: white;
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 25px rgba(11, 103, 208, 0.4);
         }
 
         .sidebar-item i {
-            margin-bottom: 8px;
-            font-size: 22px;
-            color: var(--primary-blue);
-            transition: all 0.3s ease;
+            margin-bottom: 5px;
+            font-size: 20px;
+            color: var(--dark-blue);
+            transition: color 0.3s ease;
         }
 
         .sidebar-item.active i {
             color: white;
         }
 
-        body.light-mode .sidebar-item i {
-            color: var(--dark-blue);
+        body.dark-mode .sidebar-item i {
+            color: var(--primary-blue);
         }
 
-        .sidebar-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--danger);
-            box-shadow: 0 0 0 2px var(--card-bg-dark);
-        }
-
-        body.light-mode .sidebar-badge {
-            box-shadow: 0 0 0 2px var(--card-bg-light);
-        }
-
-        /* Banner principal con carrusel mejorado */
+        /* Banner principal con carrusel */
         .banner {
             flex: 1;
-            border-radius: 20px;
+            border-radius: 15px;
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 220px;
-            box-shadow: var(--shadow);
-            animation: fadeIn 0.8s ease-out 0.4s both;
+            min-height: 200px;
         }
 
         .carousel {
@@ -560,12 +333,12 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            border-radius: 20px;
+            border-radius: 15px;
         }
 
         .carousel-track {
             display: flex;
-            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.5s ease-in-out;
             height: 100%;
         }
 
@@ -575,35 +348,24 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 25px;
+            padding: 15px;
             position: relative;
         }
 
-        .carousel-slide::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.2));
-            border-radius: 0 0 20px 20px;
-        }
-
         .slide-1 {
-            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            background: linear-gradient(45deg, var(--primary-blue), var(--dark-blue));
         }
 
         .slide-2 {
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
         }
 
         .slide-3 {
-            background: linear-gradient(135deg, #FF9800, #F57C00);
+            background: linear-gradient(45deg, #FF9800, #F57C00);
         }
 
         .slide-4 {
-            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+            background: linear-gradient(45deg, #9C27B0, #7B1FA2);
         }
 
         .banner-content {
@@ -614,400 +376,256 @@
         }
 
         .banner-title {
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .banner-subtitle {
-            font-size: 16px;
-            opacity: 0.95;
-            font-weight: 500;
+            font-size: 14px;
+            opacity: 0.9;
         }
 
         .banner-image {
             width: 100%;
-            height: 130px;
-            border-radius: 16px;
-            margin-top: 20px;
+            height: 120px;
+            border-radius: 10px;
+            margin-top: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 16px;
+            font-size: 14px;
             text-align: center;
-            padding: 15px;
+            padding: 10px;
             background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            font-weight: 600;
         }
 
         .carousel-indicators {
             position: absolute;
-            bottom: 15px;
+            bottom: 10px;
             left: 0;
             right: 0;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             z-index: 3;
         }
 
         .carousel-indicator {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.5);
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
         }
 
         .carousel-indicator.active {
             background: white;
-            transform: scale(1.3);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            transform: scale(1.2);
         }
 
-        /* Secciones mejoradas */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        /* Servicios populares */
+        .services-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px;
+            flex-shrink: 0;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode .services-section {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .section-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        body.light-mode .section-title {
             color: var(--text-dark);
-        }
-
-        .section-actions {
+            font-size: 16px;
+            margin-bottom: 12px;
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
         }
 
-        .section-action {
-            background: var(--card-bg-dark);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 8px 15px;
+        body.dark-mode .section-title {
+            color: var(--text-light);
+        }
+
+        .section-title span:last-child {
             font-size: 14px;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        body.light-mode .section-action {
-            background: var(--card-bg-light);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            color: var(--text-dark);
-        }
-
-        .section-action:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
-
-        body.light-mode .section-action:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        /* Servicios populares mejorados */
-        .services-section {
-            background: var(--card-bg-dark);
-            border-radius: 20px;
-            padding: 25px;
-            flex-shrink: 0;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInUp 0.8s ease-out 0.6s both;
-        }
-
-        body.light-mode .services-section {
-            background: var(--card-bg-light);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            opacity: 0.8;
         }
 
         .services-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 10px;
         }
 
         .service-card {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 20px 15px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 12px 8px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        body.light-mode .service-card {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            transition: left 0.6s;
-        }
-
-        .service-card:hover::before {
-            left: 100%;
-        }
-
-        .service-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: var(--shadow-hover);
-            border-color: rgba(11, 103, 208, 0.3);
-        }
-
-        body.light-mode .service-card:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        .service-icon {
-            font-size: 28px;
-            margin-bottom: 12px;
-            color: var(--primary-blue);
             transition: all 0.3s ease;
         }
 
-        body.light-mode .service-icon {
+        body.dark-mode .service-card {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .service-card:hover {
+            background: rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        body.dark-mode .service-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .service-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
             color: var(--dark-blue);
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .service-icon {
+            color: var(--primary-blue);
         }
 
         .service-name {
-            font-size: 14px;
-            color: var(--text-light);
-            font-weight: 600;
-            line-height: 1.3;
-        }
-
-        body.light-mode .service-name {
+            font-size: 12px;
             color: var(--text-dark);
+            line-height: 1.2;
+            transition: color 0.3s ease;
         }
 
-        /* Secciones de módulos mejoradas */
+        body.dark-mode .service-name {
+            color: var(--text-light);
+        }
+
+        /* Secciones de módulos */
         .modules-section {
-            background: var(--card-bg-dark);
-            border-radius: 20px;
-            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px;
             flex-shrink: 0;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
+            transition: background 0.3s ease;
         }
 
-        body.light-mode .modules-section {
-            background: var(--card-bg-light);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+        body.dark-mode .modules-section {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .modules-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
         }
 
         .module-card {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 18px;
-            padding: 25px 15px;
+            background: var(--card-bg);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 14px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            gap: 12px;
+            gap: 8px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-
-        body.light-mode .module-card {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .module-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            transition: left 0.6s;
-        }
-
-        .module-card:hover::before {
-            left: 100%;
-        }
-
-        .module-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: var(--shadow-hover);
-            border-color: rgba(11, 103, 208, 0.3);
-        }
-
-        body.light-mode .module-card:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        .module-icon {
-            font-size: 32px;
-            color: var(--primary-blue);
             transition: all 0.3s ease;
         }
 
-        body.light-mode .module-icon {
+        body.dark-mode .module-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 15px rgba(0, 150, 255, 0.2);
+        }
+
+        .module-icon {
+            font-size: 22px;
             color: var(--dark-blue);
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .module-icon {
+            color: var(--primary-blue);
         }
 
         .module-name {
             font-weight: 700;
-            font-size: 15px;
+            font-size: 14px;
+            color: var(--text-dark);
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .module-name {
             color: var(--text-light);
         }
 
-        body.light-mode .module-name {
-            color: var(--text-dark);
-        }
-
-        .module-desc {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.4;
-        }
-
-        body.light-mode .module-desc {
-            color: rgba(0, 0, 0, 0.6);
-        }
-
-        /* Indicadores de estado para módulos */
-        .module-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            color: white;
-        }
-
-        .module-badge.popular {
-            background: var(--warning);
-        }
-
-        .module-badge.new {
-            background: var(--danger);
-        }
-
-        .module-badge.updated {
-            background: var(--success);
-        }
-
-        /* Notificaciones y Trámites mejorados */
+        /* Notificaciones y Trámites */
         .notifications-tramites {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             flex-shrink: 0;
         }
 
         .section {
-            background: var(--card-bg-dark);
-            border-radius: 20px;
-            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px;
             flex: 1;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInUp 0.8s ease-out 0.8s both;
+            transition: background 0.3s ease;
         }
 
-        body.light-mode .section {
-            background: var(--card-bg-light);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+        body.dark-mode .section {
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Trámites en Proceso mejorados */
+        /* Trámites en Proceso */
         .tramites-section {
-            background: var(--card-bg-dark);
-            border-radius: 20px;
-            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px;
             flex: 1;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInUp 0.8s ease-out 1s both;
+            transition: background 0.3s ease;
         }
 
-        body.light-mode .tramites-section {
-            background: var(--card-bg-light);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+        body.dark-mode .tramites-section {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .tramites-title {
-            color: var(--text-light);
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: var(--text-dark);
+            font-size: 16px;
+            margin-bottom: 12px;
+            transition: color 0.3s ease;
         }
 
-        body.light-mode .tramites-title {
-            color: var(--text-dark);
+        body.dark-mode .tramites-title {
+            color: var(--text-light);
         }
 
         .tramite-item {
             display: flex;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        body.light-mode .tramite-item {
+            padding: 12px 0;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .tramite-item:hover {
-            transform: translateX(5px);
+        body.dark-mode .tramite-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .tramite-item:last-child {
@@ -1015,465 +633,262 @@
         }
 
         .tramite-icon {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            color: var(--primary-blue);
-            font-size: 18px;
+            margin-right: 12px;
+            color: var(--dark-blue);
+            font-size: 16px;
             flex-shrink: 0;
             transition: all 0.3s ease;
         }
 
-        body.light-mode .tramite-icon {
-            background: rgba(0, 0, 0, 0.1);
-            color: var(--dark-blue);
+        body.dark-mode .tramite-icon {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary-blue);
         }
 
         .tramite-info {
             flex: 1;
-            color: var(--text-light);
-        }
-
-        body.light-mode .tramite-info {
             color: var(--text-dark);
+            transition: color 0.3s ease;
         }
 
-        .tramite-name {
-            font-weight: 600;
-            margin-bottom: 5px;
+        body.dark-mode .tramite-info {
+            color: var(--text-light);
         }
 
         .tramite-status {
             width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            margin-top: 8px;
-            overflow: hidden;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            margin-top: 6px;
+            transition: background 0.3s ease;
         }
 
-        body.light-mode .tramite-status {
-            background: rgba(0, 0, 0, 0.1);
+        body.dark-mode .tramite-status {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .tramite-status-fill {
             height: 100%;
             background: var(--primary-blue);
-            border-radius: 4px;
+            border-radius: 3px;
             width: 70%;
-            transition: width 0.5s ease;
         }
 
-        .tramite-status-fill.completed {
-            background: var(--success);
-            width: 100%;
-        }
-
-        .tramite-status-fill.pending {
-            background: var(--warning);
-            width: 40%;
-        }
-
-        /* Notificaciones mejoradas */
+        /* Notificaciones */
         .notifications-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .notification-item {
             display: flex;
             align-items: flex-start;
-            padding: 15px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 10px;
+            background: var(--card-bg);
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        body.light-mode .notification-item {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .notification-item::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 3px;
-            background: var(--primary-blue);
             transition: all 0.3s ease;
-            transform: translateX(-50%);
-            border-radius: 0 0 16px 16px;
         }
 
-        .notification-item:hover::after {
-            width: 80%;
+        body.dark-mode .notification-item {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .notification-item:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: rgba(0, 0, 0, 0.08);
         }
 
-        body.light-mode .notification-item:hover {
-            background: rgba(0, 0, 0, 0.05);
+        body.dark-mode .notification-item:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .notification-icon {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            font-size: 18px;
+            margin-right: 12px;
+            font-size: 16px;
             color: white;
             flex-shrink: 0;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .notification-icon.blue {
             background: var(--primary-blue);
         }
 
-        .notification-icon.green {
-            background: var(--success);
+        .notification-icon.light-blue {
+            background: var(--light-blue);
         }
 
-        .notification-icon.orange {
-            background: var(--warning);
+        .notification-icon.dark-blue {
+            background: var(--dark-blue);
         }
 
-        .notification-icon.purple {
-            background: #9C27B0;
-        }
-
-        .notification-content {
+        .notification-text {
             flex: 1;
+            color: var(--text-dark);
+            transition: color 0.3s ease;
         }
 
-        .notification-title {
-            font-weight: 700;
-            margin-bottom: 5px;
-            font-size: 15px;
-        }
-
-        .notification-desc {
-            font-size: 13px;
-            opacity: 0.9;
-            line-height: 1.4;
-            margin-bottom: 5px;
+        body.dark-mode .notification-text {
+            color: var(--text-light);
         }
 
         .notification-time {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        body.light-mode .notification-time {
             color: rgba(0, 0, 0, 0.6);
+            margin-top: 4px;
+            transition: color 0.3s ease;
         }
 
-        .notification-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--danger);
+        body.dark-mode .notification-time {
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        /* Menú inferior mejorado */
+        /* Menú inferior - Siempre visible */
         .bottom-nav {
-            background: var(--card-bg-dark);
-            border-radius: 25px 25px 0 0;
-            padding: 15px 20px;
+            background: var(--card-bg);
+            border-radius: 20px 20px 0 0;
+            padding: 10px 15px;
             display: flex;
             justify-content: space-around;
             align-items: center;
             flex-shrink: 0;
-            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        body.light-mode .bottom-nav {
-            background: var(--card-bg-light);
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            border-left: 1px solid rgba(0, 0, 0, 0.1);
-            border-right: 1px solid rgba(0, 0, 0, 0.1);
+        body.dark-mode .bottom-nav {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px 15px;
-            border-radius: 16px;
+            padding: 8px 12px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            color: var(--text-light);
+            transition: all 0.3s ease;
+            color: var(--text-dark);
             font-size: 12px;
             text-align: center;
             flex: 1;
-            max-width: 80px;
-            position: relative;
-            overflow: hidden;
+            max-width: 70px;
         }
 
-        body.light-mode .nav-item {
-            color: var(--text-dark);
-        }
-
-        .nav-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            transition: left 0.6s;
-        }
-
-        .nav-item:hover::before {
-            left: 100%;
+        body.dark-mode .nav-item {
+            color: var(--text-light);
         }
 
         .nav-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        body.light-mode .nav-item:hover {
             background: rgba(0, 0, 0, 0.05);
         }
 
+        body.dark-mode .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .nav-item.active {
-            background: var(--civika-gradient);
+            background: var(--primary-blue);
             color: white;
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 12px 25px rgba(11, 103, 208, 0.4);
         }
 
         .nav-item i {
-            margin-bottom: 6px;
-            font-size: 22px;
-            color: var(--primary-blue);
-            transition: all 0.3s ease;
+            margin-bottom: 4px;
+            font-size: 20px;
+            color: var(--dark-blue);
+            transition: color 0.3s ease;
         }
 
         .nav-item.active i {
             color: white;
         }
 
-        body.light-mode .nav-item i {
-            color: var(--dark-blue);
+        body.dark-mode .nav-item i {
+            color: var(--primary-blue);
         }
 
-        .nav-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--danger);
-            box-shadow: 0 0 0 2px var(--card-bg-dark);
-        }
-
-        body.light-mode .nav-badge {
-            box-shadow: 0 0 0 2px var(--card-bg-light);
-        }
-
-        /* Animaciones */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        @keyframes confetti-fall {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--tx, 0), 100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Efectos de pulso para elementos importantes */
-        @keyframes pulse-glow {
-            0%, 100% {
-                box-shadow: 0 0 5px rgba(11, 103, 208, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(11, 103, 208, 0.8);
-            }
-        }
-
-        .pulse {
-            animation: pulse-glow 2s infinite;
-        }
-
-        /* Efectos de carga */
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
-            position: relative;
-        }
-
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
+        /* Iconos SVG monocromáticos */
+        .icon {
             width: 24px;
             height: 24px;
-            border: 3px solid transparent;
-            border-top: 3px solid var(--primary-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            transform: translate(-50%, -50%);
+            display: inline-block;
+            background-color: currentColor;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-position: center;
         }
 
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
+        .icon-home { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'/%3E%3C/svg%3E"); }
+        .icon-services { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 14v-2c-1.33 0-4 .67-4 2v2h4zm-6 0v-2c0-1.33-2.67-2-4-2v2c1.33 0 4 .67 4 2zm-6-2c-1.33 0-4 .67-4 2v2h4v-2c0-1.33 2.67-2 4-2zm12-6h-2V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM9 4h6v2H9V4z'/%3E%3C/svg%3E"); }
+        .icon-tramites { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z'/%3E%3C/svg%3E"); }
+        .icon-pagos { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z'/%3E%3C/svg%3E"); }
+        .icon-denuncias { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z'/%3E%3C/svg%3E"); }
+        .icon-mapa { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z'/%3E%3C/svg%3E"); }
+        .icon-perfil { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E"); }
+        .icon-search { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E"); }
+        .icon-water { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8zm0 18c-3.35 0-6-2.57-6-6.2 0-2.34 1.95-5.44 6-9.14 4.05 3.7 6 6.79 6 9.14 0 3.63-2.65 6.2-6 6.2z'/%3E%3C/svg%3E"); }
+        .icon-lightning { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 2v11h3v9l7-12h-4l4-8z'/%3E%3C/svg%3E"); }
+        .icon-bus { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z'/%3E%3C/svg%3E"); }
+        .icon-train { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2c-4 0-8 .5-8 4v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h2.23l2-2H14l2 2h2v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-3.58-4-8-4zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm3.5-7H6V6h5v4zm2 0V6h5v4h-5zm3.5 7c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z'/%3E%3C/svg%3E"); }
+        .icon-mail { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z'/%3E%3C/svg%3E"); }
+        .icon-location { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z'/%3E%3C/svg%3E"); }
+        .icon-clock { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E"); }
+        .icon-check { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E"); }
+        .icon-favorites { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E"); }
+        .icon-history { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z'/%3E%3C/svg%3E"); }
+        .icon-dark-mode { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9.37 5.51A7.35 7.35 0 0 0 9.1 7.5c0 4.08 3.32 7.4 7.4 7.4.68 0 1.35-.09 1.99-.27A7.014 7.014 0 0 1 12 19c-3.86 0-7-3.14-7-7 0-2.93 1.81-5.45 4.37-6.49z'/%3E%3C/svg%3E"); }
+        .icon-light-mode { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z'/%3E%3C/svg%3E"); }
+        .icon-building { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z'/%3E%3C/svg%3E"); }
+        .icon-exclamation { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E"); }
+        .icon-users { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2.01 2.01 0 0 0 18.06 7h-.12a2 2 0 0 0-1.9 1.37l-.86 2.58c1.08.6 1.82 1.73 1.82 3.05v8h3zm-7.5-10.5c.28 0 .5.22.5.5s-.22.5-.5.5-.5-.22-.5-.5.22-.5.5-.5zM9 11v6H7v-7c0-1.1.9-2 2-2h3c.83 0 1.5.67 1.5 1.5S12.83 11 12 11H9zm-5.5 6v-2h-2v4.5C1.5 20.33 2.17 21 3 21h3.5v-2H3v-1.5zm14.5 3h-2v2h2v-2zm-13-2H5v2h.5v-2z'/%3E%3C/svg%3E"); }
+        .icon-user-tie { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E"); }
+        .icon-phone { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z'/%3E%3C/svg%3E"); }
+        .icon-theater { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-1.99.9-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2zm-4.42 4.8L12 14.5l-3.58 2.3 1.08-4.12-3.29-2.69 4.24-.25L12 5.8l1.54 3.95 4.24.25-3.29 2.69 1.09 4.11z'/%3E%3C/svg%3E"); }
+        .icon-book { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z'/%3E%3C/svg%3E"); }
+        .icon-map-marked { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z'/%3E%3C/svg%3E"); }
+        .icon-map-signs { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.56-.89-1.68-1.25-2.65-.84L6 8.3V13h2V9.6l1.8-.7'/%3E%3C/svg%3E"); }
+        .icon-store { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z'/%3E%3C/svg%3E"); }
+        .icon-shopping-basket { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.21 9l-4.38-6.56c-.19-.28-.51-.42-.83-.42-.32 0-.64.14-.83.43L6.79 9H2c-.55 0-1 .45-1 1 0 .09.01.18.04.27l2.54 9.27c.23.84 1 1.46 1.92 1.46h13c.92 0 1.69-.62 1.93-1.46l2.54-9.27L23 10c0-.55-.45-1-1-1h-4.79zM9 9l3-4.4L15 9H9zm3 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z'/%3E%3C/svg%3E"); }
+        .icon-carrot { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16.1 10.9l-5.2-5.2c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l5.2 5.2c.4.4 1 .4 1.4 0 .4-.4.4-1 0-1.4zM12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z'/%3E%3C/svg%3E"); }
+        .icon-shipping { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z'/%3E%3C/svg%3E"); }
+        .icon-credit-card { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z'/%3E%3C/svg%3E"); }
+        .icon-hands-helping { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16 3.25C16 1.45 14.8 0 13.4 0c-1.1 0-2.1.7-2.6 1.68-.5-.98-1.5-1.68-2.6-1.68C7.2 0 6 1.45 6 3.25c0 .36.07.71.2 1.04-1.3.5-2.2 1.7-2.2 3.16 0 1.9 1.55 3.45 3.45 3.45h8.1c1.9 0 3.45-1.55 3.45-3.45 0-1.46-.9-2.66-2.2-3.16.13-.33.2-.68.2-1.04zM5 14c-1.1 0-2 .9-2 2v4h2v-4h14v4h2v-4c0-1.1-.9-2-2-2H5z'/%3E%3C/svg%3E"); }
+        .icon-seedling { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17 12c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5zm2.5 5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5.67 1.5 1.5 1.5 1.5-.67 1.5-1.5zM2 12C2 6.48 6.48 2 12 2s10 4.48 10 10c0 4.75-3.44 8.69-8 9.44v-2.05c3.45-.89 6-4.01 6-7.79 0-4.42-3.58-8-8-8s-8 3.58-8 8c0 3.78 2.55 6.9 6 7.79v2.05C5.44 20.69 2 16.75 2 12z'/%3E%3C/svg%3E"); }
+        .icon-user-clock { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 2C5.03 2 1 6.03 1 11s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm.5-12v5.25l4.5 2.67.75-1.23-3.75-2.25V6H10.5z'/%3E%3C/svg%3E"); }
+        .icon-robot { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z'/%3E%3C/svg%3E"); }
+        .icon-vr-cardboard { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20.56 3.91c.59.59.59 1.54 0 2.12l-3.89 3.89 2.12 9.19-1.41 1.42-3.88-7.43L12 14l-2.5 1.11-3.88 7.42-1.41-1.41 2.13-9.2-3.89-3.89a1.49 1.49 0 0 1 0-2.12c.59-.58 1.56-.58 2.15.02l3.31 3.31 3.31-3.31c.59-.59 1.56-.59 2.15-.02z'/%3E%3C/svg%3E"); }
+        .icon-chart-line { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16 11.78l4.24-7.33 1.73 1-5.23 9.05-6.51-3.75L5.46 19H22v2H2V3h2v14.54L9.5 8l6.5 3.78z'/%3E%3C/svg%3E"); }
+        .icon-id-card { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 12H7c-.55 0-1-.45-1-1s.45-1 1-1h10c.55 0 1 .45 1 1s-.45 1-1 1zm0-3H7c-.55 0-1-.45-1-1s.45-1 1-1h10c.55 0 1 .45 1 1s-.45 1-1 1zm0-3H7c-.55 0-1-.45-1-1s.45-1 1-1h10c.55 0 1 .45 1 1s-.45 1-1 1z'/%3E%3C/svg%3E"); }
 
         /* Media queries para pantallas más pequeñas */
-        @media (max-width: 768px) {
-            .top-bar {
-                padding: 12px 15px;
-            }
-            
-            .civika-text {
-                font-size: 18px;
-            }
-            
-            .search-container {
-                margin: 0 10px;
-            }
-            
-            .search-bar {
-                padding: 12px 15px;
-            }
-            
-            .welcome-content h2 {
-                font-size: 22px;
-            }
-            
-            .welcome-stats {
-                gap: 10px;
-            }
-            
-            .stat {
-                padding: 12px;
-            }
-            
-            .stat-number {
-                font-size: 22px;
-            }
-            
-            .main-content {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                overflow-x: auto;
-                padding: 15px;
-            }
-            
-            .sidebar-item {
-                flex: 0 0 auto;
-                margin-right: 10px;
-                margin-bottom: 0;
-                min-width: 80px;
-            }
-            
-            .services-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .modules-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
+        @media (max-width: 480px) {
             .notifications-tramites {
                 flex-direction: column;
             }
             
-            .bottom-nav {
-                padding: 12px 15px;
-            }
-            
-            .nav-item {
-                padding: 8px 10px;
-                font-size: 10px;
-                max-width: 70px;
-            }
-            
-            .nav-item i {
-                font-size: 18px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .civika-text {
-                font-size: 16px;
-            }
-            
-            .civika-logo {
-                width: 38px;
-                height: 38px;
-                font-size: 16px;
+            .sidebar {
+                width: 80px;
             }
             
             .search-input {
@@ -1484,167 +899,195 @@
                 font-size: 22px;
             }
             
-            .welcome-stats {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .main-content {
                 flex-direction: column;
-                gap: 10px;
             }
             
-            .stat {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 10px;
             }
             
-            .stat-number {
+            .sidebar-item {
+                flex: 0 0 auto;
+                margin-right: 10px;
                 margin-bottom: 0;
+                min-width: 70px;
+            }
+            
+            .bottom-nav {
+                padding: 8px 10px;
+            }
+            
+            .nav-item {
+                padding: 6px 8px;
+                font-size: 10px;
+            }
+            
+            .nav-item i {
+                font-size: 18px;
+            }
+            
+            .civika-brand {
+                margin-right: 10px;
+            }
+            
+            .civika-text {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-height: 700px) {
+            .banner-image {
+                height: 100px;
+            }
+            
+            .sidebar-item {
+                padding: 8px 5px;
+                margin-bottom: 6px;
+            }
+        }
+        
+        @media (max-height: 600px) {
+            .banner-image {
+                height: 80px;
+            }
+            
+            .sidebar {
+                padding: 10px 5px;
+            }
+            
+            .sidebar-item {
+                padding: 6px 5px;
+                margin-bottom: 4px;
+                font-size: 10px;
+            }
+            
+            .sidebar-item i {
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Barra superior mejorada -->
+        <!-- Barra superior con búsqueda y menú hamburguesa -->
         <div class="top-bar">
-            <div class="civika-brand" onclick="createConfetti()">
-                <img src="logo2.png" alt="Logo" class="logo-img">
+            <!-- Logo CiviKa -->
+            <div class="civika-brand">
+                <div class="civika-logo">
+                    <img src="logo2.png" alt="CiviKa Logo">
+                </div>
                 <div class="civika-text">CiviKa</div>
             </div>
             
-            <div class="search-container">
-                <div class="search-bar">
-                    <i class="search-icon fas fa-search"></i>
-                    <input type="text" class="search-input" placeholder="Buscar servicios, trámites, ayuda..." id="globalSearch">
-                </div>
+            <div class="search-bar">
+                <span class="search-icon icon-search"></span>
+                <input type="text" class="search-input" placeholder="Buscar servicios..." id="globalSearch">
             </div>
-            
             <div class="menu-icon" id="hamburgerToggle">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
             
-            <!-- Menú desplegable mejorado -->
+            <!-- Menú desplegable hamburguesa -->
             <div class="hamburger-menu" id="hamburgerMenu">
                 <div class="hamburger-item" id="darkModeToggle">
-                    <i class="fas fa-moon"></i>
+                    <i class="icon icon-light-mode"></i>
                     <span>Modo Oscuro</span>
                 </div>
                 <div class="hamburger-item">
-                    <i class="fas fa-cog"></i>
+                    <i class="icon icon-services"></i>
                     <span>Configuración</span>
                 </div>
                 <div class="hamburger-item">
-                    <i class="fas fa-bell"></i>
-                    <span>Notificaciones</span>
-                    <div class="notification-badge"></div>
-                </div>
-                <div class="hamburger-item">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Ayuda & Soporte</span>
-                </div>
-                <div class="hamburger-item">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Cerrar Sesión</span>
+                    <i class="icon icon-help"></i>
+                    <span>Ayuda</span>
                 </div>
             </div>
         </div>
 
-        <!-- Contenido principal -->
+        <!-- Contenido principal desplazable - 3/4 de la pantalla -->
         <div class="main-scrollable">
-            <!-- Banner de bienvenida mejorado -->
-            <div class="welcome-banner">
-                <div class="welcome-content">
-                    <h2>¡Bienvenido a tu Superapp Municipal!</h2>
-                    <p>Gestiona todos los servicios de tu ciudad en un solo lugar. Rápido, seguro y eficiente.</p>
-                    <div class="welcome-stats">
-                        <div class="stat">
-                            <span class="stat-number" id="servicesCount">15</span>
-                            <span class="stat-label">Servicios activos</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">24/7</span>
-                            <span class="stat-label">Disponibilidad</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">98%</span>
-                            <span class="stat-label">Satisfacción</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Contenido principal -->
             <div class="main-content">
-                <!-- Menú lateral mejorado -->
+                <!-- Menú lateral -->
                 <div class="sidebar">
                     <div class="sidebar-item active">
-                        <i class="fas fa-home"></i>
+                        <i class="icon icon-home"></i>
                         Inicio
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-th-large"></i>
+                        <i class="icon icon-services"></i>
                         Servicios
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-file-alt"></i>
+                        <i class="icon icon-tramites"></i>
                         Trámites
-                        <div class="sidebar-badge"></div>
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-credit-card"></i>
+                        <i class="icon icon-pagos"></i>
                         Pagos
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-exclamation-triangle"></i>
+                        <i class="icon icon-denuncias"></i>
                         Denuncias
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-map-marked-alt"></i>
+                        <i class="icon icon-mapa"></i>
                         Mapa
                     </div>
                     <div class="sidebar-item">
-                        <i class="fas fa-user-circle"></i>
+                        <i class="icon icon-perfil"></i>
                         Perfil
                     </div>
                 </div>
 
-                <!-- Banner principal con carrusel mejorado -->
+                <!-- Banner principal con carrusel -->
                 <div class="banner">
                     <div class="carousel">
                         <div class="carousel-track" id="carouselTrack">
                             <!-- Slide 1 -->
                             <div class="carousel-slide slide-1">
                                 <div class="banner-content">
-                                    <div class="banner-title">Superapp Municipal CiviKa</div>
-                                    <div class="banner-subtitle">Tu ciudad inteligente en tus manos</div>
+                                    <div class="banner-title">Superapp Municipal</div>
+                                    <div class="banner-subtitle">Tu ciudad en tus manos</div>
                                 </div>
                                 <div class="banner-image">
-                                    <i class="fas fa-mobile-alt" style="margin-right: 10px;"></i>
-                                    Accede a todos los servicios municipales desde tu dispositivo
+                                    Accede a todos los servicios municipales
                                 </div>
                             </div>
                             
                             <!-- Slide 2 -->
                             <div class="carousel-slide slide-2">
                                 <div class="banner-content">
-                                    <div class="banner-title">Trámites 100% Digitales</div>
-                                    <div class="banner-subtitle">Sin filas, sin papeles, sin esperas</div>
+                                    <div class="banner-title">Trámites Rápidos</div>
+                                    <div class="banner-subtitle">Sin filas, sin esperas</div>
                                 </div>
                                 <div class="banner-image">
-                                    <i class="fas fa-bolt" style="margin-right: 10px;"></i>
-                                    Realiza tus trámites en minutos desde cualquier lugar
+                                    Realiza tus trámites desde cualquier lugar
                                 </div>
                             </div>
                             
                             <!-- Slide 3 -->
                             <div class="carousel-slide slide-3">
                                 <div class="banner-content">
-                                    <div class="banner-title">Notificaciones Inteligentes</div>
-                                    <div class="banner-subtitle">Mantente informado en tiempo real</div>
+                                    <div class="banner-title">Notificaciones</div>
+                                    <div class="banner-subtitle">Mantente informado</div>
                                 </div>
                                 <div class="banner-image">
-                                    <i class="fas fa-bell" style="margin-right: 10px;"></i>
-                                    Recibe alertas sobre el estado de tus trámites y servicios
+                                    Recibe alertas sobre tus trámites
                                 </div>
                             </div>
                             
@@ -1655,8 +1098,7 @@
                                     <div class="banner-subtitle">Disponible cuando lo necesites</div>
                                 </div>
                                 <div class="banner-image">
-                                    <i class="fas fa-clock" style="margin-right: 10px;"></i>
-                                    Accede a servicios municipales las 24 horas del día
+                                    Accede a servicios municipales las 24 horas
                                 </div>
                             </div>
                         </div>
@@ -1672,358 +1114,244 @@
                 </div>
             </div>
 
-            <!-- Servicios Populares mejorados -->
+            <!-- Servicios Populares -->
             <div class="services-section">
-                <div class="section-header">
-                    <div class="section-title">
-                        <i class="fas fa-star" style="color: var(--warning);"></i>
-                        <span>Servicios Populares</span>
-                    </div>
-                    <div class="section-actions">
-                        <div class="section-action" onclick="showAllServices()">
-                            <i class="fas fa-arrow-right"></i>
-                            <span>Ver todos</span>
-                        </div>
-                    </div>
+                <div class="section-title">
+                    <span>Servicios Populares</span>
                 </div>
                 <div class="services-grid">
                     <div class="service-card" onclick="openModule('municipal')">
-                        <i class="service-icon fas fa-building"></i>
+                        <div class="service-icon icon icon-building"></div>
                         <div class="service-name">Municipal</div>
                     </div>
                     <div class="service-card" onclick="openModule('denuncias')">
-                        <i class="service-icon fas fa-exclamation-triangle"></i>
+                        <div class="service-icon icon icon-exclamation"></div>
                         <div class="service-name">Denuncias</div>
                     </div>
                     <div class="service-card" onclick="openModule('pagos')">
-                        <i class="service-icon fas fa-credit-card"></i>
+                        <div class="service-icon icon icon-credit-card"></div>
                         <div class="service-name">Pagos</div>
                     </div>
                     <div class="service-card" onclick="openModule('transporte')">
-                        <i class="service-icon fas fa-bus"></i>
+                        <div class="service-icon icon icon-bus"></div>
                         <div class="service-name">Transporte</div>
                     </div>
                     <div class="service-card" onclick="openModule('cultura')">
-                        <i class="service-icon fas fa-theater-masks"></i>
+                        <div class="service-icon icon icon-theater"></div>
                         <div class="service-name">Cultura</div>
                     </div>
                     <div class="service-card" onclick="openModule('ia')">
-                        <i class="service-icon fas fa-robot"></i>
+                        <div class="service-icon icon icon-robot"></div>
                         <div class="service-name">Asistente IA</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Módulos de Gobierno & Atención mejorados -->
+            <!-- Módulos de Gobierno & Atención -->
             <div class="modules-section">
-                <div class="section-header">
-                    <div class="section-title">
-                        <i class="fas fa-landmark" style="color: var(--primary-blue);"></i>
-                        <span>Gobierno & Atención</span>
-                    </div>
-                    <div class="section-actions">
-                        <div class="section-action" onclick="filterModules('gobierno')">
-                            <i class="fas fa-filter"></i>
-                            <span>Filtrar</span>
-                        </div>
-                    </div>
+                <div class="section-title">
+                    <span>Gobierno & Atención</span>
                 </div>
                 <div class="modules-grid">
                     <div class="module-card" onclick="openModule('municipal')">
-                        <div class="module-badge popular">Popular</div>
-                        <i class="module-icon fas fa-building"></i>
+                        <div class="module-icon icon icon-building"></div>
                         <div class="module-name">Municipal</div>
-                        <div class="module-desc">Gestión municipal completa</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('denuncias')">
-                        <div class="module-badge popular">Popular</div>
-                        <i class="module-icon fas fa-exclamation-triangle"></i>
+                        <div class="module-icon icon icon-exclamation"></div>
                         <div class="module-name">Denuncias</div>
-                        <div class="module-desc">Reporta problemas en la ciudad</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('organizaciones')">
-                        <i class="module-icon fas fa-users"></i>
+                        <div class="module-icon icon icon-users"></div>
                         <div class="module-name">Organizaciones</div>
-                        <div class="module-desc">Comunidades y agrupaciones</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('dirigentes')">
-                        <i class="module-icon fas fa-user-tie"></i>
+                        <div class="module-icon icon icon-user-tie"></div>
                         <div class="module-name">Dirigentes</div>
-                        <div class="module-desc">Líderes comunitarios</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('fonos')">
-                        <div class="module-badge new">Nuevo</div>
-                        <i class="module-icon fas fa-phone-alt"></i>
+                        <div class="module-icon icon icon-phone"></div>
                         <div class="module-name">Emergencias</div>
-                        <div class="module-desc">Teléfonos de urgencia</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Módulos de Cultura & Turismo mejorados -->
+            <!-- Módulos de Cultura & Turismo -->
             <div class="modules-section">
-                <div class="section-header">
-                    <div class="section-title">
-                        <i class="fas fa-theater-masks" style="color: #9C27B0;"></i>
-                        <span>Cultura & Turismo</span>
-                    </div>
+                <div class="section-title">
+                    <span>Cultura & Turismo</span>
                 </div>
                 <div class="modules-grid">
                     <div class="module-card" onclick="openModule('cultura')">
-                        <i class="module-icon fas fa-theater-masks"></i>
+                        <div class="module-icon icon icon-theater"></div>
                         <div class="module-name">Cultura</div>
-                        <div class="module-desc">Eventos y actividades</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('biblioteca')">
-                        <i class="module-icon fas fa-book"></i>
+                        <div class="module-icon icon icon-book"></div>
                         <div class="module-name">Biblioteca</div>
-                        <div class="module-desc">Recursos y lectura</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('rutaTesoro')">
-                        <div class="module-badge new">Nuevo</div>
-                        <i class="module-icon fas fa-map-marked-alt"></i>
+                        <div class="module-icon icon icon-map-marked"></div>
                         <div class="module-name">Ruta del Tesoro</div>
-                        <div class="module-desc">Descubre lugares emblemáticos</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('turismo')">
-                        <i class="module-icon fas fa-map-signs"></i>
+                        <div class="module-icon icon icon-map-signs"></div>
                         <div class="module-name">Turismo</div>
-                        <div class="module-desc">Guía de visitantes</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Módulos de Economía & Comercio mejorados -->
+            <!-- Módulos de Economía & Comercio -->
             <div class="modules-section">
-                <div class="section-header">
-                    <div class="section-title">
-                        <i class="fas fa-chart-line" style="color: var(--success);"></i>
-                        <span>Economía & Comercio</span>
-                    </div>
+                <div class="section-title">
+                    <span>Economía & Comercio</span>
                 </div>
                 <div class="modules-grid">
                     <div class="module-card" onclick="openModule('marketplace')">
-                        <i class="module-icon fas fa-store"></i>
+                        <div class="module-icon icon icon-store"></div>
                         <div class="module-name">Marketplace</div>
-                        <div class="module-desc">Compra y venta local</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('mercado')">
-                        <i class="module-icon fas fa-shopping-basket"></i>
+                        <div class="module-icon icon icon-shopping-basket"></div>
                         <div class="module-name">Mercado</div>
-                        <div class="module-desc">Productos frescos</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('feria')">
-                        <i class="module-icon fas fa-carrot"></i>
+                        <div class="module-icon icon icon-carrot"></div>
                         <div class="module-name">Feria</div>
-                        <div class="module-desc">Eventos comerciales</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('delivery')">
-                        <div class="module-badge new">Nuevo</div>
-                        <i class="module-icon fas fa-shipping-fast"></i>
+                        <div class="module-icon icon icon-shipping"></div>
                         <div class="module-name">Delivery</div>
-                        <div class="module-desc">Entrega a domicilio</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('pagos')">
-                        <div class="module-badge popular">Popular</div>
-                        <i class="module-icon fas fa-credit-card"></i>
+                        <div class="module-icon icon icon-credit-card"></div>
                         <div class="module-name">Pagos</div>
-                        <div class="module-desc">Pagos y facturas</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Módulos de Transporte & Comunidad mejorados -->
+            <!-- Módulos de Transporte & Comunidad -->
             <div class="modules-section">
-                <div class="section-header">
-                    <div class="section-title">
-                        <i class="fas fa-bus" style="color: #FF9800;"></i>
-                        <span>Transporte & Comunidad</span>
-                    </div>
+                <div class="section-title">
+                    <span>Transporte & Comunidad</span>
                 </div>
                 <div class="modules-grid">
                     <div class="module-card" onclick="openModule('transporte')">
-                        <div class="module-badge popular">Popular</div>
-                        <i class="module-icon fas fa-bus"></i>
+                        <div class="module-icon icon icon-bus"></div>
                         <div class="module-name">Transporte</div>
-                        <div class="module-desc">Rutas y horarios</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('voluntariado')">
-                        <i class="module-icon fas fa-hands-helping"></i>
+                        <div class="module-icon icon icon-hands-helping"></div>
                         <div class="module-name">Voluntariado</div>
-                        <div class="module-desc">Ayuda a tu comunidad</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('huertas')">
-                        <i class="module-icon fas fa-seedling"></i>
+                        <div class="module-icon icon icon-seedling"></div>
                         <div class="module-name">Huertas</div>
-                        <div class="module-desc">Agricultura urbana</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('adultomayor')">
-                        <i class="module-icon fas fa-user-clock"></i>
+                        <div class="module-icon icon icon-user-clock"></div>
                         <div class="module-name">Adulto Mayor</div>
-                        <div class="module-desc">Programas especiales</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Módulos de Innovación & Futuro mejorados -->
+            <!-- Módulos de Innovación & Futuro -->
             <div class="modules-section">
-                <div class="section-header">
-                    <div class="section-title">
-                        <i class="fas fa-robot" style="color: var(--civika-accent);"></i>
-                        <span>Innovación & Futuro</span>
-                    </div>
+                <div class="section-title">
+                    <span>Innovación & Futuro</span>
                 </div>
                 <div class="modules-grid">
                     <div class="module-card" onclick="openModule('ia')">
-                        <div class="module-badge popular">Popular</div>
-                        <i class="module-icon fas fa-robot"></i>
+                        <div class="module-icon icon icon-robot"></div>
                         <div class="module-name">Asistente IA</div>
-                        <div class="module-desc">Ayuda inteligente 24/7</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('ar')">
-                        <div class="module-badge new">Nuevo</div>
-                        <i class="module-icon fas fa-vr-cardboard"></i>
+                        <div class="module-icon icon icon-vr-cardboard"></div>
                         <div class="module-name">AR Turismo</div>
-                        <div class="module-desc">Realidad aumentada</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('analitica')">
-                        <i class="module-icon fas fa-chart-line"></i>
+                        <div class="module-icon icon icon-chart-line"></div>
                         <div class="module-name">Analítica</div>
-                        <div class="module-desc">Datos y estadísticas</div>
                     </div>
-                    
                     <div class="module-card" onclick="openModule('identidad')">
-                        <i class="module-icon fas fa-id-card"></i>
+                        <div class="module-icon icon icon-id-card"></div>
                         <div class="module-name">Identidad</div>
-                        <div class="module-desc">Digital identity</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Notificaciones y Trámites mejorados -->
+            <!-- Notificaciones y Trámites -->
             <div class="notifications-tramites">
-                <!-- Notificaciones mejoradas -->
+                <!-- Notificaciones -->
                 <div class="section">
-                    <div class="section-header">
-                        <div class="section-title">
-                            <i class="fas fa-bell" style="color: var(--warning);"></i>
-                            <span>Notificaciones</span>
-                        </div>
-                        <div class="section-actions">
-                            <div class="section-action" onclick="showAllNotifications()">
-                                <i class="fas fa-arrow-right"></i>
-                                <span>Ver todas</span>
-                            </div>
-                        </div>
+                    <div class="section-title">
+                        <span>Notificaciones</span>
+                        <span>➤</span>
                     </div>
                     <div class="notifications-list">
                         <div class="notification-item">
                             <div class="notification-icon blue">
-                                <i class="fas fa-check-circle"></i>
+                                <i class="icon icon-location"></i>
                             </div>
-                            <div class="notification-content">
-                                <div class="notification-title">Trámite aprobado</div>
-                                <div class="notification-desc">Tu solicitud de licencia comercial ha sido aprobada</div>
-                                <div class="notification-time">
-                                    <i class="fas fa-clock"></i>
-                                    Hace 2 horas
-                                </div>
-                            </div>
-                            <div class="notification-badge"></div>
-                        </div>
-                        
-                        <div class="notification-item">
-                            <div class="notification-icon orange">
-                                <i class="fas fa-exclamation-circle"></i>
-                            </div>
-                            <div class="notification-content">
-                                <div class="notification-title">Pago pendiente</div>
-                                <div class="notification-desc">Impuesto municipal vence en 3 días</div>
-                                <div class="notification-time">
-                                    <i class="fas fa-clock"></i>
-                                    Hace 5 horas
-                                </div>
+                            <div class="notification-text">
+                                <div>Recepción de trámite</div>
+                                <div class="notification-time">13:49</div>
                             </div>
                         </div>
-                        
                         <div class="notification-item">
-                            <div class="notification-icon purple">
-                                <i class="fas fa-calendar-alt"></i>
+                            <div class="notification-icon light-blue">
+                                <i class="icon icon-clock"></i>
                             </div>
-                            <div class="notification-content">
-                                <div class="notification-title">Evento cultural</div>
-                                <div class="notification-desc">Festival municipal este fin de semana en el parque central</div>
-                                <div class="notification-time">
-                                    <i class="fas fa-clock"></i>
-                                    Ayer
-                                </div>
+                            <div class="notification-text">
+                                <div>Pago de multa</div>
+                                <div class="notification-time">23:49</div>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-icon dark-blue">
+                                <i class="icon icon-check"></i>
+                            </div>
+                            <div class="notification-text">
+                                <div>Aprobación de trámite</div>
+                                <div class="notification-time">13:45</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Trámites en Proceso mejorados -->
+                <!-- Trámites en Proceso -->
                 <div class="tramites-section">
-                    <div class="section-header">
-                        <div class="tramites-title">
-                            <i class="fas fa-tasks" style="color: var(--success);"></i>
-                            <span>Trámites en Proceso</span>
+                    <div class="tramites-title">Trámites en Proceso</div>
+                    <div class="tramite-item">
+                        <div class="tramite-icon">
+                            <i class="icon icon-location"></i>
                         </div>
-                        <div class="section-actions">
-                            <div class="section-action" onclick="showAllTramites()">
-                                <i class="fas fa-arrow-right"></i>
-                                <span>Ver todos</span>
+                        <div class="tramite-info">
+                            <div>Trámites en Proceso</div>
+                            <div class="tramite-status">
+                                <div class="tramite-status-fill"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="tramites-list">
-                        <div class="tramite-item">
-                            <div class="tramite-icon">
-                                <i class="fas fa-file-contract"></i>
-                            </div>
-                            <div class="tramite-info">
-                                <div class="tramite-name">Licencia de conducir</div>
-                                <div class="tramite-status">
-                                    <div class="tramite-status-fill completed"></div>
-                                </div>
+                    <div class="tramite-item">
+                        <div class="tramite-icon">
+                            <i class="icon icon-location"></i>
+                        </div>
+                        <div class="tramite-info">
+                            <div>Trámites en Proceso</div>
+                            <div class="tramite-status">
+                                <div class="tramite-status-fill"></div>
                             </div>
                         </div>
-                        <div class="tramite-item">
-                            <div class="tramite-icon">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <div class="tramite-info">
-                                <div class="tramite-name">Permiso de construcción</div>
-                                <div class="tramite-status">
-                                    <div class="tramite-status-fill" style="width: 70%;"></div>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="tramite-item">
+                        <div class="tramite-icon">
+                            <i class="icon icon-location"></i>
                         </div>
-                        <div class="tramite-item">
-                            <div class="tramite-icon">
-                                <i class="fas fa-store"></i>
-                            </div>
-                            <div class="tramite-info">
-                                <div class="tramite-name">Licencia comercial</div>
-                                <div class="tramite-status">
-                                    <div class="tramite-status-fill pending"></div>
-                                </div>
+                        <div class="tramite-info">
+                            <div>Trámites en Proceso</div>
+                            <div class="tramite-status">
+                                <div class="tramite-status-fill"></div>
                             </div>
                         </div>
                     </div>
@@ -2031,77 +1359,72 @@
             </div>
         </div>
 
-        <!-- Menú inferior mejorado con 5 iconos -->
+        <!-- Menú inferior - Siempre visible -->
         <div class="bottom-nav">
             <div class="nav-item active">
-                <i class="fas fa-home"></i>
+                <i class="icon icon-home"></i>
                 Inicio
             </div>
             <div class="nav-item">
-                <i class="fas fa-compass"></i>
-                Explorar
+                <i class="icon icon-favorites"></i>
+                Favoritos
             </div>
             <div class="nav-item">
-                <i class="fas fa-file-alt"></i>
-                Trámites
-                <div class="nav-badge"></div>
+                <i class="icon icon-history"></i>
+                Historial
             </div>
             <div class="nav-item">
-                <i class="fas fa-bell"></i>
-                Alertas
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-user-circle"></i>
+                <i class="icon icon-perfil"></i>
                 Perfil
+            </div>
+            <div class="nav-item">
+                <i class="icon icon-services"></i>
+                Más
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Elementos del DOM
             const sidebarItems = document.querySelectorAll('.sidebar-item');
             const navItems = document.querySelectorAll('.nav-item');
             const hamburgerToggle = document.getElementById('hamburgerToggle');
             const hamburgerMenu = document.getElementById('hamburgerMenu');
             const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeIcon = darkModeToggle.querySelector('i');
+            const darkModeText = darkModeToggle.querySelector('span');
             const globalSearch = document.getElementById('globalSearch');
             
             // Funcionalidad del menú lateral
             sidebarItems.forEach(item => {
                 item.addEventListener('click', function() {
+                    // Remover clase active de todos los elementos
                     sidebarItems.forEach(el => el.classList.remove('active'));
-                    this.classList.add('active');
                     
-                    // Efecto de sonido (simulado)
-                    playSound('click');
+                    // Añadir clase active al elemento clickeado
+                    this.classList.add('active');
                 });
             });
 
             // Funcionalidad del menú inferior
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
+                    // Remover clase active de todos los elementos
                     navItems.forEach(el => el.classList.remove('active'));
-                    this.classList.add('active');
                     
-                    // Efecto de sonido (simulado)
-                    playSound('click');
+                    // Añadir clase active al elemento clickeado
+                    this.classList.add('active');
                 });
             });
 
             // Funcionalidad del menú hamburguesa
             hamburgerToggle.addEventListener('click', function(e) {
                 e.stopPropagation();
-                this.classList.toggle('active');
                 hamburgerMenu.classList.toggle('active');
-                
-                // Efecto de sonido (simulado)
-                playSound('menu');
             });
 
             // Cerrar menú hamburguesa al hacer clic fuera
             document.addEventListener('click', function() {
-                hamburgerToggle.classList.remove('active');
                 hamburgerMenu.classList.remove('active');
             });
 
@@ -2112,136 +1435,42 @@
 
             // Funcionalidad del modo oscuro/claro
             darkModeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('light-mode');
-                const isLightMode = document.body.classList.contains('light-mode');
+                document.body.classList.toggle('dark-mode');
                 
-                // Cambiar ícono
-                const icon = this.querySelector('i');
-                icon.className = isLightMode ? 'fas fa-sun' : 'fas fa-moon';
-                this.querySelector('span').textContent = isLightMode ? 'Modo Claro' : 'Modo Oscuro';
-                
-                // Guardar preferencia
-                localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
-                
-                // Efecto de sonido (simulado)
-                playSound('toggle');
+                if (document.body.classList.contains('dark-mode')) {
+                    darkModeIcon.className = 'icon icon-dark-mode';
+                    darkModeText.textContent = 'Modo Claro';
+                } else {
+                    darkModeIcon.className = 'icon icon-light-mode';
+                    darkModeText.textContent = 'Modo Oscuro';
+                }
                 
                 // Cerrar el menú después de cambiar el modo
                 hamburgerMenu.classList.remove('active');
-                hamburgerToggle.classList.remove('active');
             });
 
-            // Cargar tema guardado
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-mode');
-                const icon = darkModeToggle.querySelector('i');
-                icon.className = 'fas fa-sun';
-                darkModeToggle.querySelector('span').textContent = 'Modo Claro';
-            }
-
-            // Efectos de interacción mejorados
-            const interactiveElements = document.querySelectorAll('.service-card, .module-card, .nav-item, .sidebar-item, .notification-item, .tramite-item');
-            
-            interactiveElements.forEach(element => {
-                element.addEventListener('mouseenter', function() {
-                    this.style.transform = this.classList.contains('nav-item') || this.classList.contains('sidebar-item') 
-                        ? 'translateY(-8px) scale(1.05)' 
-                        : 'translateY(-5px) scale(1.03)';
-                });
-                
-                element.addEventListener('mouseleave', function() {
-                    if (!this.classList.contains('active')) {
-                        this.style.transform = this.classList.contains('nav-item') && this.classList.contains('active')
-                            ? 'translateY(-8px) scale(1.05)'
-                            : 'translateY(0) scale(1)';
-                    }
-                });
-                
-                element.addEventListener('click', function() {
+            // Simular interacción con servicios
+            const serviceCards = document.querySelectorAll('.service-card');
+            serviceCards.forEach(card => {
+                card.addEventListener('click', function() {
                     this.style.transform = 'scale(0.95)';
                     setTimeout(() => {
-                        this.style.transform = this.classList.contains('active') 
-                            ? (this.classList.contains('nav-item') || this.classList.contains('sidebar-item') 
-                                ? 'translateY(-8px) scale(1.05)' 
-                                : 'translateY(-5px) scale(1.03)')
-                            : 'scale(1)';
-                    }, 150);
+                        this.style.transform = 'scale(1)';
+                    }, 200);
                 });
             });
 
-            // Simular notificaciones en tiempo real
-            function showNewNotification() {
-                const notifications = [
-                    {
-                        title: "Nuevo servicio disponible",
-                        desc: "Ahora puedes solicitar tu certificado de residencia en línea",
-                        icon: "fas fa-star",
-                        color: "green",
-                        time: "Hace 10 min"
-                    },
-                    {
-                        title: "Recordatorio de pago",
-                        desc: "Tu factura de agua vence en 2 días",
-                        icon: "fas fa-tint",
-                        color: "blue",
-                        time: "Hace 25 min"
-                    },
-                    {
-                        title: "Evento próximo",
-                        desc: "Feria de empleo municipal este viernes",
-                        icon: "fas fa-calendar",
-                        color: "purple",
-                        time: "Hace 1 hora"
-                    }
-                ];
-                
-                const randomNotif = notifications[Math.floor(Math.random() * notifications.length)];
-                const notification = document.createElement('div');
-                notification.className = 'notification-item';
-                notification.innerHTML = `
-                    <div class="notification-icon ${randomNotif.color}">
-                        <i class="${randomNotif.icon}"></i>
-                    </div>
-                    <div class="notification-content">
-                        <div class="notification-title">${randomNotif.title}</div>
-                        <div class="notification-desc">${randomNotif.desc}</div>
-                        <div class="notification-time">
-                            <i class="fas fa-clock"></i>
-                            ${randomNotif.time}
-                        </div>
-                    </div>
-                    <div class="notification-badge"></div>
-                `;
-                
-                notification.style.background = 'rgba(11, 103, 208, 0.1)';
-                notification.style.borderLeft = '4px solid var(--primary-blue)';
-                notification.classList.add('pulse');
-                
-                const notificationsList = document.querySelector('.notifications-list');
-                notificationsList.insertBefore(notification, notificationsList.firstChild);
-                
-                // Actualizar badge del menú
-                const navBadge = document.querySelector('.nav-badge');
-                if (navBadge) {
-                    navBadge.style.animation = 'pulse-glow 1s 3';
+            // Simular notificaciones nuevas
+            setInterval(() => {
+                const notifications = document.querySelectorAll('.notification-item');
+                if (notifications.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * notifications.length);
+                    notifications[randomIndex].style.background = 'rgba(0, 0, 0, 0.08)';
+                    setTimeout(() => {
+                        notifications[randomIndex].style.background = '';
+                    }, 1000);
                 }
-                
-                setTimeout(() => {
-                    notification.classList.remove('pulse');
-                }, 2000);
-                
-                // Limitar a 5 notificaciones
-                if (notificationsList.children.length > 5) {
-                    notificationsList.removeChild(notificationsList.lastChild);
-                }
-                
-                // Efecto de sonido (simulado)
-                playSound('notification');
-            }
-
-            // Simular notificación cada 30 segundos
-            setInterval(showNewNotification, 30000);
+            }, 8000);
 
             // Funcionalidad del carrusel
             const carouselTrack = document.getElementById('carouselTrack');
@@ -2288,9 +1517,6 @@
                     goToSlide(slideIndex);
                     stopCarousel();
                     startCarousel();
-                    
-                    // Efecto de sonido (simulado)
-                    playSound('click');
                 });
             });
 
@@ -2303,185 +1529,27 @@
             // Iniciar carrusel
             startCarousel();
 
-            // Funcionalidad de búsqueda con sugerencias
-            let searchTimeout;
+            // Funcionalidad de búsqueda
             globalSearch.addEventListener('input', function(e) {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const moduleCards = document.querySelectorAll('.module-card, .service-card');
-                    let resultsCount = 0;
-                    
-                    moduleCards.forEach(card => {
-                        const moduleName = card.querySelector('.module-name, .service-name').textContent.toLowerCase();
-                        if (moduleName.includes(searchTerm)) {
-                            card.style.display = 'flex';
-                            resultsCount++;
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                    
-                    // Mostrar mensaje si no hay resultados
-                    showSearchResults(resultsCount, searchTerm);
-                }, 300);
-            });
-
-            // Animación de entrada para secciones
-            const sections = document.querySelectorAll('.modules-section');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
+                const searchTerm = e.target.value.toLowerCase();
+                const moduleCards = document.querySelectorAll('.module-card, .service-card');
+                
+                moduleCards.forEach(card => {
+                    const moduleName = card.querySelector('.module-name, .service-name').textContent.toLowerCase();
+                    if (moduleName.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
                     }
                 });
-            }, { threshold: 0.1 });
-
-            sections.forEach(section => {
-                observer.observe(section);
             });
 
-            // Efecto de confeti al hacer clic en el logo
-            const civikaLogo = document.querySelector('.civika-logo');
-            civikaLogo.addEventListener('click', function(e) {
-                e.stopPropagation();
-                createConfetti();
-                
-                // Efecto de sonido (simulado)
-                playSound('confetti');
-            });
-
-            // Efecto de bienvenida
-            setTimeout(() => {
-                document.body.classList.add('loaded');
-                
-                // Mostrar notificación de bienvenida
-                setTimeout(() => {
-                    showNewNotification();
-                }, 1000);
-            }, 500);
-
-            // Actualizar estadísticas en tiempo real
-            function updateStats() {
-                const servicesCount = document.getElementById('servicesCount');
-                let count = parseInt(servicesCount.textContent);
-                
-                // Simular cambio en estadísticas
-                if (Math.random() > 0.7) {
-                    count += Math.floor(Math.random() * 3);
-                    servicesCount.textContent = count;
-                    
-                    // Efecto de animación
-                    servicesCount.style.transform = 'scale(1.2)';
-                    setTimeout(() => {
-                        servicesCount.style.transform = 'scale(1)';
-                    }, 300);
-                }
-            }
-
-            // Actualizar estadísticas cada 10 segundos
-            setInterval(updateStats, 10000);
-        });
-
-        // Función para crear efecto de confeti
-        function createConfetti() {
-            const colors = ['#0b67d0', '#00b67a', '#ff9800', '#f44336', '#9C27B0', '#FFC107'];
-            for (let i = 0; i < 25; i++) {
-                const confetti = document.createElement('div');
-                confetti.style.position = 'fixed';
-                confetti.style.width = '10px';
-                confetti.style.height = '10px';
-                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.borderRadius = '50%';
-                confetti.style.left = '50%';
-                confetti.style.top = '70px';
-                confetti.style.pointerEvents = 'none';
-                confetti.style.zIndex = '1000';
-                confetti.style.setProperty('--tx', `${Math.random() * 300 - 150}px`);
-                confetti.style.animation = `confetti-fall ${Math.random() * 2 + 1}s ease-out forwards`;
-                
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => {
-                    confetti.remove();
-                }, 2000);
-            }
-        }
-
-        // Función para simular efectos de sonido
-        function playSound(type) {
-            // En una aplicación real, aquí se reproducirían sonidos
-            console.log(`Playing sound: ${type}`);
-        }
-
-        // Función para mostrar resultados de búsqueda
-        function showSearchResults(count, term) {
-            // En una aplicación real, aquí se mostraría un mensaje con los resultados
-            if (term.length > 0) {
-                console.log(`Found ${count} results for "${term}"`);
-            }
-        }
-
-        // Funciones para los botones de acción
-        function showAllServices() {
-            alert('Mostrando todos los servicios...');
-            // En una aplicación real, aquí se navegaría a la pantalla de servicios
-        }
-
-        function showAllNotifications() {
-            alert('Mostrando todas las notificaciones...');
-            // En una aplicación real, aquí se navegaría a la pantalla de notificaciones
-        }
-
-        function showAllTramites() {
-            alert('Mostrando todos los trámites...');
-            // En una aplicación real, aquí se navegaría a la pantalla de trámites
-        }
-
-        function filterModules(category) {
-            alert(`Filtrando módulos de: ${category}`);
-            // En una aplicación real, aquí se filtrarían los módulos por categoría
-        }
-
-        // Función para abrir módulos
-        window.openModule = function(moduleKey) {
-            const moduleNames = {
-                'municipal': 'Municipal',
-                'denuncias': 'Denuncias',
-                'organizaciones': 'Organizaciones',
-                'dirigentes': 'Dirigentes',
-                'fonos': 'Emergencias',
-                'cultura': 'Cultura',
-                'biblioteca': 'Biblioteca',
-                'rutaTesoro': 'Ruta del Tesoro',
-                'turismo': 'Turismo',
-                'marketplace': 'Marketplace',
-                'mercado': 'Mercado',
-                'feria': 'Feria',
-                'delivery': 'Delivery',
-                'pagos': 'Pagos',
-                'transporte': 'Transporte',
-                'voluntariado': 'Voluntariado',
-                'huertas': 'Huertas',
-                'adultomayor': 'Adulto Mayor',
-                'ia': 'Asistente IA',
-                'ar': 'AR Turismo',
-                'analitica': 'Analítica',
-                'identidad': 'Identidad'
+            // Funcionalidad de módulos
+            window.openModule = function(moduleKey) {
+                alert(`Abriendo módulo: ${moduleKey.charAt(0).toUpperCase() + moduleKey.slice(1)}\n\nEsta funcionalidad está en desarrollo.`);
+                // Aquí puedes implementar la lógica para abrir cada módulo específico
             };
-            
-            const moduleName = moduleNames[moduleKey] || moduleKey;
-            
-            // Simular carga del módulo
-            const button = event.currentTarget;
-            button.classList.add('loading');
-            
-            setTimeout(() => {
-                button.classList.remove('loading');
-                alert(`Abriendo módulo: ${moduleName}\n\nEsta funcionalidad está en desarrollo.`);
-            }, 1000);
-        };
+        });
     </script>
 </body>
 </html>
