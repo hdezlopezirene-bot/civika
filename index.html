@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Superapp Municipal - CiviKa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #0096ff;
+            --dark-blue: #0047ab;
+            --light-blue: #66b3ff;
+            --civika-primary: #0b67d0;
+            --civika-accent: #00b67a;
+            --civika-gradient: linear-gradient(135deg, #0b67d0, #00b67a);
+            --bg-dark: #0f0c19;
+            --bg-light: #f8faff;
+            --text-dark: #1a237e;
+            --text-light: #e8eaf6;
+            --card-bg-dark: rgba(255, 255, 255, 0.08);
+            --card-bg-light: rgba(255, 255, 255, 0.9);
+            --success: #00c853;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --shadow-hover: 0 12px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        body {
+            background: var(--bg-dark);
+            min-height: 100vh;
+            color: var(--text-light);
+            overflow-x: hidden;
+            transition: all 0.4s ease;
+        }
+
+        body.light-mode {
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .app-container {
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-dark);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        body.light-mode .app-container {
+            background: var(--bg-light);
+        }
+
+        /* Barra superior mejorada */
+        .top-bar {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .top-bar {
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Logo CiviKa mejorado */
+        .civika-brand {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .civika-logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--civika-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            box-shadow: 0 6px 20px rgba(11, 103, 208, 0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .civika-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            transition: all 0.8s ease;
+        }
+
+        .civika-brand:hover .civika-logo::before {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .civika-brand:hover .civika-logo {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(11, 103, 208, 0.6);
+        }
+
+        .civika-text {
+            font-size: 22px;
+            font-weight: 800;
+            white-space: nowrap;
+            background: var(--civika-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(11, 103, 208, 0.3);
+        }
+
+        body.light-mode .civika-text {
+            background: var(--civika-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Barra de búsqueda mejorada */
+        .search-container {
+            flex: 1;
+            margin: 0 20px;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-bar {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 25px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .search-bar {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar:focus-within {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(11, 103, 208, 0.6);
+            box-shadow: 0 0 0 3px rgba(11, 103, 208, 0.15), 0 6px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        body.light-mode .search-bar:focus-within {
+            background: rgba(0, 0, 0, 0.08);
+            border-color: rgba(11, 103, 208, 0.4);
+        }
+
+        .search-icon {
+            color: var(--text-light);
+            margin-right: 12px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .search-icon {
+            color: var(--text-dark);
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+            font-weight: 500;
+        }
+
+        body.light-mode .search-input {
+            color: var(--text-dark);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+        }
+
+        body.light-mode .search-input::placeholder {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Menú hamburguesa mejorado */
+        .menu-icon {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .menu-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .menu-icon span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: var(--text-light);
+            border-radius: 3px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform-origin: center;
+        }
+
+        body.light-mode .menu-icon span {
+            background: var(--text-dark);
+        }
+
+        .menu-icon.active span:nth-child(1) {
+            transform: translateY(11px) rotate(45deg);
+        }
+
+        .menu-icon.active span:nth-child(2) {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .menu-icon.active span:nth-child(3) {
+            transform: translateY(-11px) rotate(-45deg);
+        }
+
+        /* Menú desplegable mejorado */
+        .hamburger-menu {
+            position: absolute;
+            top: 100%;
+            right: 20px;
+            background: var(--bg-dark);
+            border-radius: 18px;
+            padding: 15px;
+            box-shadow: var(--shadow-hover);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            min-width: 200px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu.active {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        body.light-mode .hamburger-menu {
+            background: var(--card-bg-light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .hamburger-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        body.light-mode .hamburger-item {
+            color: var(--text-dark);
+        }
+
+        .hamburger-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        body.light-mode .hamburger-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .hamburger-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .hamburger-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Contenido principal mejorado */
+        .main-scrollable {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .main-scrollable::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .main-scrollable::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .main-scrollable::-webkit-scrollbar-thumb {
+            background: var(--civika-primary);
+            border-radius: 10px;
+        }
+
+        .main-scrollable::-webkit-scrollbar-thumb:hover {
+            background: var(--civika-accent);
+        }
+
+        /* Banner de bienvenida mejorado */
+        .welcome-banner {
+            background: var(--civika-gradient);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 10px;
+            color: white;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: pulse 6s infinite ease-in-out;
+        }
+
+        .welcome-content h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-content p {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+            line-height: 1.5;
+        }
+
+        .welcome-stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat {
+            text-align: center;
+            flex: 1;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        /* Contenido principal */
+        .main-content {
+            display: flex;
+            gap: 20px;
+            flex: 0 0 auto;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+
+        /* Menú lateral mejorado */
+        .sidebar {
+            background: var(--card-bg-dark);
+            border-radius: 20px;
+            padding: 20px 15px;
+            width: 100px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-mode .sidebar {
+            background: var(--card-bg-light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 10px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--text-light);
+            font-size: 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light-mode .sidebar-item {
+            color: var(--text-dark);
+        }
+
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.6s;
+        }
+
+        .sidebar-item:hover::before {
+            left: 100%;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        body.light-mode .sidebar-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-item.active {
+            background: var(--civika-gradient);
+            color: white;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(11, 103, 208, 0.4);
+        }
+
+        .sidebar-item i {
+            margin-bottom: 8px;
+            font-size: 22px;
+            color: var(--primary-blue);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-item.active i {
+            color: white;
+        }
+
+        body.light-mode .sidebar-item i {
+            color: var(--dark-blue);
+        }
+
+        .sidebar-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--danger);
+            box-shadow: 0 0 0 2px var(--card-bg-dark);
+        }
+
+        body.light-mode .sidebar-badge {
+            box-shadow: 0 0 0 2px var(--card-bg-light);
+        }
+
+        /* Banner principal con carrusel mejorado */
+        .banner {
+            flex: 1;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 220px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            height: 100%;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 25px;
+            position: relative;
+        }
+
+        .carousel-slide::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.2));
+            border-radius: 0 0 20px 20px;
+        }
+
+        .slide-1 {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+        }
+
+        .slide-2 {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        }
+
+        .slide-3 {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+        }
+
+        .slide-4 {
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+        }
+
+        .banner-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+            position: relative;
+        }
+
+        .banner-title {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .banner-subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .banner-image {
+            width: 100%;
+            height: 130px;
+            border-radius: 16px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 3;
+        }
+
+        .carousel-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .carousel-indicator.active {
+            background: white;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Secciones mejoradas */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        body.light-mode .section-title {
+            color: var(--text-dark);
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .section-action {
+            background: var(--card-bg-dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px 15px;
+            font-size: 14px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        body.light-mode .section-action {
+            background: var(--card-bg-light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-dark);
+        }
+
+        .section-action:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        body.light-mode .section-action:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Servicios populares mejorados */
+        .services-section {
+            background: var(--card-bg-dark);
+            border-radius: 20px;
+            padding: 25px;
+            flex-shrink: 0;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        body.light-mode .services-section {
+            background: var(--card-bg-light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-mode .service-card {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.6s;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(11, 103, 208, 0.3);
+        }
+
+        body.light-mode .service-card:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .service-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+            color: var(--primary-blue);
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .service-icon {
+            color: var(--dark-blue);
+        }
+
+        .service-name {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        body.light-mode .service-name {
+            color: var(--text-dark);
+        }
+
+        /* Secciones de módulos mejoradas */
+        .modules-section {
+            background: var(--card-bg-dark);
+            border-radius: 20px;
+            padding: 25px;
+            flex-shrink: 0;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        body.light-mode .modules-section {
+            background: var(--card-bg-light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light-mode .module-card {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.6s;
+        }
+
+        .module-card:hover::before {
+            left: 100%;
+        }
+
+        .module-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(11, 103, 208, 0.3);
+        }
+
+        body.light-mode .module-card:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .module-icon {
+            font-size: 32px;
+            color: var(--primary-blue);
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .module-icon {
+            color: var(--dark-blue);
+        }
+
+        .module-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-light);
+        }
+
+        body.light-mode .module-name {
+            color: var(--text-dark);
+        }
+
+        .module-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
+        }
+
+        body.light-mode .module-desc {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Indicadores de estado para módulos */
+        .module-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        .module-badge.popular {
+            background: var(--warning);
+        }
+
+        .module-badge.new {
+            background: var(--danger);
+        }
+
+        .module-badge.updated {
+            background: var(--success);
+        }
+
+        /* Notificaciones y Trámites mejorados */
+        .notifications-tramites {
+            display: flex;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .section {
+            background: var(--card-bg-dark);
+            border-radius: 20px;
+            padding: 25px;
+            flex: 1;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        body.light-mode .section {
+            background: var(--card-bg-light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Trámites en Proceso mejorados */
+        .tramites-section {
+            background: var(--card-bg-dark);
+            border-radius: 20px;
+            padding: 25px;
+            flex: 1;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out 1s both;
+        }
+
+        body.light-mode .tramites-section {
+            background: var(--card-bg-light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .tramites-title {
+            color: var(--text-light);
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        body.light-mode .tramites-title {
+            color: var(--text-dark);
+        }
+
+        .tramite-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .tramite-item {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .tramite-item:hover {
+            transform: translateX(5px);
+        }
+
+        .tramite-item:last-child {
+            border-bottom: none;
+        }
+
+        .tramite-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-blue);
+            font-size: 18px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .tramite-icon {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--dark-blue);
+        }
+
+        .tramite-info {
+            flex: 1;
+            color: var(--text-light);
+        }
+
+        body.light-mode .tramite-info {
+            color: var(--text-dark);
+        }
+
+        .tramite-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .tramite-status {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        body.light-mode .tramite-status {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .tramite-status-fill {
+            height: 100%;
+            background: var(--primary-blue);
+            border-radius: 4px;
+            width: 70%;
+            transition: width 0.5s ease;
+        }
+
+        .tramite-status-fill.completed {
+            background: var(--success);
+            width: 100%;
+        }
+
+        .tramite-status-fill.pending {
+            background: var(--warning);
+            width: 40%;
+        }
+
+        /* Notificaciones mejoradas */
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        body.light-mode .notification-item {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .notification-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--primary-blue);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+            border-radius: 0 0 16px 16px;
+        }
+
+        .notification-item:hover::after {
+            width: 80%;
+        }
+
+        .notification-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        body.light-mode .notification-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification-icon.blue {
+            background: var(--primary-blue);
+        }
+
+        .notification-icon.green {
+            background: var(--success);
+        }
+
+        .notification-icon.orange {
+            background: var(--warning);
+        }
+
+        .notification-icon.purple {
+            background: #9C27B0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .notification-desc {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.4;
+            margin-bottom: 5px;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        body.light-mode .notification-time {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--danger);
+        }
+
+        /* Menú inferior mejorado */
+        .bottom-nav {
+            background: var(--card-bg-dark);
+            border-radius: 25px 25px 0 0;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-shrink: 0;
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-mode .bottom-nav {
+            background: var(--card-bg-light);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-left: 1px solid rgba(0, 0, 0, 0.1);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--text-light);
+            font-size: 12px;
+            text-align: center;
+            flex: 1;
+            max-width: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light-mode .nav-item {
+            color: var(--text-dark);
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.6s;
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-mode .nav-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item.active {
+            background: var(--civika-gradient);
+            color: white;
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 12px 25px rgba(11, 103, 208, 0.4);
+        }
+
+        .nav-item i {
+            margin-bottom: 6px;
+            font-size: 22px;
+            color: var(--primary-blue);
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active i {
+            color: white;
+        }
+
+        body.light-mode .nav-item i {
+            color: var(--dark-blue);
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--danger);
+            box-shadow: 0 0 0 2px var(--card-bg-dark);
+        }
+
+        body.light-mode .nav-badge {
+            box-shadow: 0 0 0 2px var(--card-bg-light);
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx, 0), 100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Efectos de pulso para elementos importantes */
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(11, 103, 208, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(11, 103, 208, 0.8);
+            }
+        }
+
+        .pulse {
+            animation: pulse-glow 2s infinite;
+        }
+
+        /* Efectos de carga */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 24px;
+            height: 24px;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Media queries para pantallas más pequeñas */
+        @media (max-width: 768px) {
+            .top-bar {
+                padding: 12px 15px;
+            }
+            
+            .civika-text {
+                font-size: 18px;
+            }
+            
+            .search-container {
+                margin: 0 10px;
+            }
+            
+            .search-bar {
+                padding: 12px 15px;
+            }
+            
+            .welcome-content h2 {
+                font-size: 22px;
+            }
+            
+            .welcome-stats {
+                gap: 10px;
+            }
+            
+            .stat {
+                padding: 12px;
+            }
+            
+            .stat-number {
+                font-size: 22px;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 15px;
+            }
+            
+            .sidebar-item {
+                flex: 0 0 auto;
+                margin-right: 10px;
+                margin-bottom: 0;
+                min-width: 80px;
+            }
+            
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .notifications-tramites {
+                flex-direction: column;
+            }
+            
+            .bottom-nav {
+                padding: 12px 15px;
+            }
+            
+            .nav-item {
+                padding: 8px 10px;
+                font-size: 10px;
+                max-width: 70px;
+            }
+            
+            .nav-item i {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .civika-text {
+                font-size: 16px;
+            }
+            
+            .civika-logo {
+                width: 38px;
+                height: 38px;
+                font-size: 16px;
+            }
+            
+            .search-input {
+                font-size: 14px;
+            }
+            
+            .banner-title {
+                font-size: 22px;
+            }
+            
+            .welcome-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stat {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .stat-number {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Barra superior mejorada -->
+        <div class="top-bar">
+            <div class="civika-brand" onclick="createConfetti()">
+                <div class="civika-logo">CK</div>
+                <div class="civika-text">CiviKa</div>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-bar">
+                    <i class="search-icon fas fa-search"></i>
+                    <input type="text" class="search-input" placeholder="Buscar servicios, trámites, ayuda..." id="globalSearch">
+                </div>
+            </div>
+            
+            <div class="menu-icon" id="hamburgerToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <!-- Menú desplegable mejorado -->
+            <div class="hamburger-menu" id="hamburgerMenu">
+                <div class="hamburger-item" id="darkModeToggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Modo Oscuro</span>
+                </div>
+                <div class="hamburger-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Configuración</span>
+                </div>
+                <div class="hamburger-item">
+                    <i class="fas fa-bell"></i>
+                    <span>Notificaciones</span>
+                    <div class="notification-badge"></div>
+                </div>
+                <div class="hamburger-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Ayuda & Soporte</span>
+                </div>
+                <div class="hamburger-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="main-scrollable">
+            <!-- Banner de bienvenida mejorado -->
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <h2>¡Bienvenido a tu Superapp Municipal!</h2>
+                    <p>Gestiona todos los servicios de tu ciudad en un solo lugar. Rápido, seguro y eficiente.</p>
+                    <div class="welcome-stats">
+                        <div class="stat">
+                            <span class="stat-number" id="servicesCount">15</span>
+                            <span class="stat-label">Servicios activos</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Disponibilidad</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">Satisfacción</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido principal -->
+            <div class="main-content">
+                <!-- Menú lateral mejorado -->
+                <div class="sidebar">
+                    <div class="sidebar-item active">
+                        <i class="fas fa-home"></i>
+                        Inicio
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-th-large"></i>
+                        Servicios
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-file-alt"></i>
+                        Trámites
+                        <div class="sidebar-badge"></div>
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-credit-card"></i>
+                        Pagos
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Denuncias
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-map-marked-alt"></i>
+                        Mapa
+                    </div>
+                    <div class="sidebar-item">
+                        <i class="fas fa-user-circle"></i>
+                        Perfil
+                    </div>
+                </div>
+
+                <!-- Banner principal con carrusel mejorado -->
+                <div class="banner">
+                    <div class="carousel">
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- Slide 1 -->
+                            <div class="carousel-slide slide-1">
+                                <div class="banner-content">
+                                    <div class="banner-title">Superapp Municipal CiviKa</div>
+                                    <div class="banner-subtitle">Tu ciudad inteligente en tus manos</div>
+                                </div>
+                                <div class="banner-image">
+                                    <i class="fas fa-mobile-alt" style="margin-right: 10px;"></i>
+                                    Accede a todos los servicios municipales desde tu dispositivo
+                                </div>
+                            </div>
+                            
+                            <!-- Slide 2 -->
+                            <div class="carousel-slide slide-2">
+                                <div class="banner-content">
+                                    <div class="banner-title">Trámites 100% Digitales</div>
+                                    <div class="banner-subtitle">Sin filas, sin papeles, sin esperas</div>
+                                </div>
+                                <div class="banner-image">
+                                    <i class="fas fa-bolt" style="margin-right: 10px;"></i>
+                                    Realiza tus trámites en minutos desde cualquier lugar
+                                </div>
+                            </div>
+                            
+                            <!-- Slide 3 -->
+                            <div class="carousel-slide slide-3">
+                                <div class="banner-content">
+                                    <div class="banner-title">Notificaciones Inteligentes</div>
+                                    <div class="banner-subtitle">Mantente informado en tiempo real</div>
+                                </div>
+                                <div class="banner-image">
+                                    <i class="fas fa-bell" style="margin-right: 10px;"></i>
+                                    Recibe alertas sobre el estado de tus trámites y servicios
+                                </div>
+                            </div>
+                            
+                            <!-- Slide 4 -->
+                            <div class="carousel-slide slide-4">
+                                <div class="banner-content">
+                                    <div class="banner-title">Servicios 24/7</div>
+                                    <div class="banner-subtitle">Disponible cuando lo necesites</div>
+                                </div>
+                                <div class="banner-image">
+                                    <i class="fas fa-clock" style="margin-right: 10px;"></i>
+                                    Accede a servicios municipales las 24 horas del día
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Indicadores del carrusel -->
+                        <div class="carousel-indicators" id="carouselIndicators">
+                            <div class="carousel-indicator active" data-slide="0"></div>
+                            <div class="carousel-indicator" data-slide="1"></div>
+                            <div class="carousel-indicator" data-slide="2"></div>
+                            <div class="carousel-indicator" data-slide="3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Servicios Populares mejorados -->
+            <div class="services-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-star" style="color: var(--warning);"></i>
+                        <span>Servicios Populares</span>
+                    </div>
+                    <div class="section-actions">
+                        <div class="section-action" onclick="showAllServices()">
+                            <i class="fas fa-arrow-right"></i>
+                            <span>Ver todos</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="services-grid">
+                    <div class="service-card" onclick="openModule('municipal')">
+                        <i class="service-icon fas fa-building"></i>
+                        <div class="service-name">Municipal</div>
+                    </div>
+                    <div class="service-card" onclick="openModule('denuncias')">
+                        <i class="service-icon fas fa-exclamation-triangle"></i>
+                        <div class="service-name">Denuncias</div>
+                    </div>
+                    <div class="service-card" onclick="openModule('pagos')">
+                        <i class="service-icon fas fa-credit-card"></i>
+                        <div class="service-name">Pagos</div>
+                    </div>
+                    <div class="service-card" onclick="openModule('transporte')">
+                        <i class="service-icon fas fa-bus"></i>
+                        <div class="service-name">Transporte</div>
+                    </div>
+                    <div class="service-card" onclick="openModule('cultura')">
+                        <i class="service-icon fas fa-theater-masks"></i>
+                        <div class="service-name">Cultura</div>
+                    </div>
+                    <div class="service-card" onclick="openModule('ia')">
+                        <i class="service-icon fas fa-robot"></i>
+                        <div class="service-name">Asistente IA</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulos de Gobierno & Atención mejorados -->
+            <div class="modules-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-landmark" style="color: var(--primary-blue);"></i>
+                        <span>Gobierno & Atención</span>
+                    </div>
+                    <div class="section-actions">
+                        <div class="section-action" onclick="filterModules('gobierno')">
+                            <i class="fas fa-filter"></i>
+                            <span>Filtrar</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" onclick="openModule('municipal')">
+                        <div class="module-badge popular">Popular</div>
+                        <i class="module-icon fas fa-building"></i>
+                        <div class="module-name">Municipal</div>
+                        <div class="module-desc">Gestión municipal completa</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('denuncias')">
+                        <div class="module-badge popular">Popular</div>
+                        <i class="module-icon fas fa-exclamation-triangle"></i>
+                        <div class="module-name">Denuncias</div>
+                        <div class="module-desc">Reporta problemas en la ciudad</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('organizaciones')">
+                        <i class="module-icon fas fa-users"></i>
+                        <div class="module-name">Organizaciones</div>
+                        <div class="module-desc">Comunidades y agrupaciones</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('dirigentes')">
+                        <i class="module-icon fas fa-user-tie"></i>
+                        <div class="module-name">Dirigentes</div>
+                        <div class="module-desc">Líderes comunitarios</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('fonos')">
+                        <div class="module-badge new">Nuevo</div>
+                        <i class="module-icon fas fa-phone-alt"></i>
+                        <div class="module-name">Emergencias</div>
+                        <div class="module-desc">Teléfonos de urgencia</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulos de Cultura & Turismo mejorados -->
+            <div class="modules-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-theater-masks" style="color: #9C27B0;"></i>
+                        <span>Cultura & Turismo</span>
+                    </div>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" onclick="openModule('cultura')">
+                        <i class="module-icon fas fa-theater-masks"></i>
+                        <div class="module-name">Cultura</div>
+                        <div class="module-desc">Eventos y actividades</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('biblioteca')">
+                        <i class="module-icon fas fa-book"></i>
+                        <div class="module-name">Biblioteca</div>
+                        <div class="module-desc">Recursos y lectura</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('rutaTesoro')">
+                        <div class="module-badge new">Nuevo</div>
+                        <i class="module-icon fas fa-map-marked-alt"></i>
+                        <div class="module-name">Ruta del Tesoro</div>
+                        <div class="module-desc">Descubre lugares emblemáticos</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('turismo')">
+                        <i class="module-icon fas fa-map-signs"></i>
+                        <div class="module-name">Turismo</div>
+                        <div class="module-desc">Guía de visitantes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulos de Economía & Comercio mejorados -->
+            <div class="modules-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-chart-line" style="color: var(--success);"></i>
+                        <span>Economía & Comercio</span>
+                    </div>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" onclick="openModule('marketplace')">
+                        <i class="module-icon fas fa-store"></i>
+                        <div class="module-name">Marketplace</div>
+                        <div class="module-desc">Compra y venta local</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('mercado')">
+                        <i class="module-icon fas fa-shopping-basket"></i>
+                        <div class="module-name">Mercado</div>
+                        <div class="module-desc">Productos frescos</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('feria')">
+                        <i class="module-icon fas fa-carrot"></i>
+                        <div class="module-name">Feria</div>
+                        <div class="module-desc">Eventos comerciales</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('delivery')">
+                        <div class="module-badge new">Nuevo</div>
+                        <i class="module-icon fas fa-shipping-fast"></i>
+                        <div class="module-name">Delivery</div>
+                        <div class="module-desc">Entrega a domicilio</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('pagos')">
+                        <div class="module-badge popular">Popular</div>
+                        <i class="module-icon fas fa-credit-card"></i>
+                        <div class="module-name">Pagos</div>
+                        <div class="module-desc">Pagos y facturas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulos de Transporte & Comunidad mejorados -->
+            <div class="modules-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-bus" style="color: #FF9800;"></i>
+                        <span>Transporte & Comunidad</span>
+                    </div>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" onclick="openModule('transporte')">
+                        <div class="module-badge popular">Popular</div>
+                        <i class="module-icon fas fa-bus"></i>
+                        <div class="module-name">Transporte</div>
+                        <div class="module-desc">Rutas y horarios</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('voluntariado')">
+                        <i class="module-icon fas fa-hands-helping"></i>
+                        <div class="module-name">Voluntariado</div>
+                        <div class="module-desc">Ayuda a tu comunidad</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('huertas')">
+                        <i class="module-icon fas fa-seedling"></i>
+                        <div class="module-name">Huertas</div>
+                        <div class="module-desc">Agricultura urbana</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('adultomayor')">
+                        <i class="module-icon fas fa-user-clock"></i>
+                        <div class="module-name">Adulto Mayor</div>
+                        <div class="module-desc">Programas especiales</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulos de Innovación & Futuro mejorados -->
+            <div class="modules-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-robot" style="color: var(--civika-accent);"></i>
+                        <span>Innovación & Futuro</span>
+                    </div>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card" onclick="openModule('ia')">
+                        <div class="module-badge popular">Popular</div>
+                        <i class="module-icon fas fa-robot"></i>
+                        <div class="module-name">Asistente IA</div>
+                        <div class="module-desc">Ayuda inteligente 24/7</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('ar')">
+                        <div class="module-badge new">Nuevo</div>
+                        <i class="module-icon fas fa-vr-cardboard"></i>
+                        <div class="module-name">AR Turismo</div>
+                        <div class="module-desc">Realidad aumentada</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('analitica')">
+                        <i class="module-icon fas fa-chart-line"></i>
+                        <div class="module-name">Analítica</div>
+                        <div class="module-desc">Datos y estadísticas</div>
+                    </div>
+                    
+                    <div class="module-card" onclick="openModule('identidad')">
+                        <i class="module-icon fas fa-id-card"></i>
+                        <div class="module-name">Identidad</div>
+                        <div class="module-desc">Digital identity</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notificaciones y Trámites mejorados -->
+            <div class="notifications-tramites">
+                <!-- Notificaciones mejoradas -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-bell" style="color: var(--warning);"></i>
+                            <span>Notificaciones</span>
+                        </div>
+                        <div class="section-actions">
+                            <div class="section-action" onclick="showAllNotifications()">
+                                <i class="fas fa-arrow-right"></i>
+                                <span>Ver todas</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notifications-list">
+                        <div class="notification-item">
+                            <div class="notification-icon blue">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Trámite aprobado</div>
+                                <div class="notification-desc">Tu solicitud de licencia comercial ha sido aprobada</div>
+                                <div class="notification-time">
+                                    <i class="fas fa-clock"></i>
+                                    Hace 2 horas
+                                </div>
+                            </div>
+                            <div class="notification-badge"></div>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-icon orange">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Pago pendiente</div>
+                                <div class="notification-desc">Impuesto municipal vence en 3 días</div>
+                                <div class="notification-time">
+                                    <i class="fas fa-clock"></i>
+                                    Hace 5 horas
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-icon purple">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Evento cultural</div>
+                                <div class="notification-desc">Festival municipal este fin de semana en el parque central</div>
+                                <div class="notification-time">
+                                    <i class="fas fa-clock"></i>
+                                    Ayer
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trámites en Proceso mejorados -->
+                <div class="tramites-section">
+                    <div class="section-header">
+                        <div class="tramites-title">
+                            <i class="fas fa-tasks" style="color: var(--success);"></i>
+                            <span>Trámites en Proceso</span>
+                        </div>
+                        <div class="section-actions">
+                            <div class="section-action" onclick="showAllTramites()">
+                                <i class="fas fa-arrow-right"></i>
+                                <span>Ver todos</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tramites-list">
+                        <div class="tramite-item">
+                            <div class="tramite-icon">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div class="tramite-info">
+                                <div class="tramite-name">Licencia de conducir</div>
+                                <div class="tramite-status">
+                                    <div class="tramite-status-fill completed"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tramite-item">
+                            <div class="tramite-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="tramite-info">
+                                <div class="tramite-name">Permiso de construcción</div>
+                                <div class="tramite-status">
+                                    <div class="tramite-status-fill" style="width: 70%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tramite-item">
+                            <div class="tramite-icon">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <div class="tramite-info">
+                                <div class="tramite-name">Licencia comercial</div>
+                                <div class="tramite-status">
+                                    <div class="tramite-status-fill pending"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menú inferior mejorado con 5 iconos -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <i class="fas fa-home"></i>
+                Inicio
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-compass"></i>
+                Explorar
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-file-alt"></i>
+                Trámites
+                <div class="nav-badge"></div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-bell"></i>
+                Alertas
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-user-circle"></i>
+                Perfil
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos del DOM
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            const navItems = document.querySelectorAll('.nav-item');
+            const hamburgerToggle = document.getElementById('hamburgerToggle');
+            const hamburgerMenu = document.getElementById('hamburgerMenu');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const globalSearch = document.getElementById('globalSearch');
+            
+            // Funcionalidad del menú lateral
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    sidebarItems.forEach(el => el.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Efecto de sonido (simulado)
+                    playSound('click');
+                });
+            });
+
+            // Funcionalidad del menú inferior
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(el => el.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Efecto de sonido (simulado)
+                    playSound('click');
+                });
+            });
+
+            // Funcionalidad del menú hamburguesa
+            hamburgerToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('active');
+                hamburgerMenu.classList.toggle('active');
+                
+                // Efecto de sonido (simulado)
+                playSound('menu');
+            });
+
+            // Cerrar menú hamburguesa al hacer clic fuera
+            document.addEventListener('click', function() {
+                hamburgerToggle.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+            });
+
+            // Evitar que el clic dentro del menú lo cierre
+            hamburgerMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Funcionalidad del modo oscuro/claro
+            darkModeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('light-mode');
+                const isLightMode = document.body.classList.contains('light-mode');
+                
+                // Cambiar ícono
+                const icon = this.querySelector('i');
+                icon.className = isLightMode ? 'fas fa-sun' : 'fas fa-moon';
+                this.querySelector('span').textContent = isLightMode ? 'Modo Claro' : 'Modo Oscuro';
+                
+                // Guardar preferencia
+                localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+                
+                // Efecto de sonido (simulado)
+                playSound('toggle');
+                
+                // Cerrar el menú después de cambiar el modo
+                hamburgerMenu.classList.remove('active');
+                hamburgerToggle.classList.remove('active');
+            });
+
+            // Cargar tema guardado
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                const icon = darkModeToggle.querySelector('i');
+                icon.className = 'fas fa-sun';
+                darkModeToggle.querySelector('span').textContent = 'Modo Claro';
+            }
+
+            // Efectos de interacción mejorados
+            const interactiveElements = document.querySelectorAll('.service-card, .module-card, .nav-item, .sidebar-item, .notification-item, .tramite-item');
+            
+            interactiveElements.forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    this.style.transform = this.classList.contains('nav-item') || this.classList.contains('sidebar-item') 
+                        ? 'translateY(-8px) scale(1.05)' 
+                        : 'translateY(-5px) scale(1.03)';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = this.classList.contains('nav-item') && this.classList.contains('active')
+                            ? 'translateY(-8px) scale(1.05)'
+                            : 'translateY(0) scale(1)';
+                    }
+                });
+                
+                element.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = this.classList.contains('active') 
+                            ? (this.classList.contains('nav-item') || this.classList.contains('sidebar-item') 
+                                ? 'translateY(-8px) scale(1.05)' 
+                                : 'translateY(-5px) scale(1.03)')
+                            : 'scale(1)';
+                    }, 150);
+                });
+            });
+
+            // Simular notificaciones en tiempo real
+            function showNewNotification() {
+                const notifications = [
+                    {
+                        title: "Nuevo servicio disponible",
+                        desc: "Ahora puedes solicitar tu certificado de residencia en línea",
+                        icon: "fas fa-star",
+                        color: "green",
+                        time: "Hace 10 min"
+                    },
+                    {
+                        title: "Recordatorio de pago",
+                        desc: "Tu factura de agua vence en 2 días",
+                        icon: "fas fa-tint",
+                        color: "blue",
+                        time: "Hace 25 min"
+                    },
+                    {
+                        title: "Evento próximo",
+                        desc: "Feria de empleo municipal este viernes",
+                        icon: "fas fa-calendar",
+                        color: "purple",
+                        time: "Hace 1 hora"
+                    }
+                ];
+                
+                const randomNotif = notifications[Math.floor(Math.random() * notifications.length)];
+                const notification = document.createElement('div');
+                notification.className = 'notification-item';
+                notification.innerHTML = `
+                    <div class="notification-icon ${randomNotif.color}">
+                        <i class="${randomNotif.icon}"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">${randomNotif.title}</div>
+                        <div class="notification-desc">${randomNotif.desc}</div>
+                        <div class="notification-time">
+                            <i class="fas fa-clock"></i>
+                            ${randomNotif.time}
+                        </div>
+                    </div>
+                    <div class="notification-badge"></div>
+                `;
+                
+                notification.style.background = 'rgba(11, 103, 208, 0.1)';
+                notification.style.borderLeft = '4px solid var(--primary-blue)';
+                notification.classList.add('pulse');
+                
+                const notificationsList = document.querySelector('.notifications-list');
+                notificationsList.insertBefore(notification, notificationsList.firstChild);
+                
+                // Actualizar badge del menú
+                const navBadge = document.querySelector('.nav-badge');
+                if (navBadge) {
+                    navBadge.style.animation = 'pulse-glow 1s 3';
+                }
+                
+                setTimeout(() => {
+                    notification.classList.remove('pulse');
+                }, 2000);
+                
+                // Limitar a 5 notificaciones
+                if (notificationsList.children.length > 5) {
+                    notificationsList.removeChild(notificationsList.lastChild);
+                }
+                
+                // Efecto de sonido (simulado)
+                playSound('notification');
+            }
+
+            // Simular notificación cada 30 segundos
+            setInterval(showNewNotification, 30000);
+
+            // Funcionalidad del carrusel
+            const carouselTrack = document.getElementById('carouselTrack');
+            const carouselIndicators = document.querySelectorAll('.carousel-indicator');
+            let currentSlide = 0;
+            const totalSlides = 4;
+            let carouselInterval;
+
+            // Función para cambiar de slide
+            function goToSlide(slideIndex) {
+                currentSlide = slideIndex;
+                carouselTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+                
+                // Actualizar indicadores
+                carouselIndicators.forEach((indicator, index) => {
+                    if (index === currentSlide) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }
+
+            // Función para siguiente slide
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                goToSlide(currentSlide);
+            }
+
+            // Iniciar carrusel automático
+            function startCarousel() {
+                carouselInterval = setInterval(nextSlide, 5000);
+            }
+
+            // Detener carrusel
+            function stopCarousel() {
+                clearInterval(carouselInterval);
+            }
+
+            // Event listeners para indicadores
+            carouselIndicators.forEach(indicator => {
+                indicator.addEventListener('click', function() {
+                    const slideIndex = parseInt(this.getAttribute('data-slide'));
+                    goToSlide(slideIndex);
+                    stopCarousel();
+                    startCarousel();
+                    
+                    // Efecto de sonido (simulado)
+                    playSound('click');
+                });
+            });
+
+            // Pausar carrusel al interactuar
+            carouselTrack.addEventListener('mouseenter', stopCarousel);
+            carouselTrack.addEventListener('mouseleave', startCarousel);
+            carouselTrack.addEventListener('touchstart', stopCarousel);
+            carouselTrack.addEventListener('touchend', startCarousel);
+
+            // Iniciar carrusel
+            startCarousel();
+
+            // Funcionalidad de búsqueda con sugerencias
+            let searchTimeout;
+            globalSearch.addEventListener('input', function(e) {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const moduleCards = document.querySelectorAll('.module-card, .service-card');
+                    let resultsCount = 0;
+                    
+                    moduleCards.forEach(card => {
+                        const moduleName = card.querySelector('.module-name, .service-name').textContent.toLowerCase();
+                        if (moduleName.includes(searchTerm)) {
+                            card.style.display = 'flex';
+                            resultsCount++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                    
+                    // Mostrar mensaje si no hay resultados
+                    showSearchResults(resultsCount, searchTerm);
+                }, 300);
+            });
+
+            // Animación de entrada para secciones
+            const sections = document.querySelectorAll('.modules-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Efecto de confeti al hacer clic en el logo
+            const civikaLogo = document.querySelector('.civika-logo');
+            civikaLogo.addEventListener('click', function(e) {
+                e.stopPropagation();
+                createConfetti();
+                
+                // Efecto de sonido (simulado)
+                playSound('confetti');
+            });
+
+            // Efecto de bienvenida
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+                
+                // Mostrar notificación de bienvenida
+                setTimeout(() => {
+                    showNewNotification();
+                }, 1000);
+            }, 500);
+
+            // Actualizar estadísticas en tiempo real
+            function updateStats() {
+                const servicesCount = document.getElementById('servicesCount');
+                let count = parseInt(servicesCount.textContent);
+                
+                // Simular cambio en estadísticas
+                if (Math.random() > 0.7) {
+                    count += Math.floor(Math.random() * 3);
+                    servicesCount.textContent = count;
+                    
+                    // Efecto de animación
+                    servicesCount.style.transform = 'scale(1.2)';
+                    setTimeout(() => {
+                        servicesCount.style.transform = 'scale(1)';
+                    }, 300);
+                }
+            }
+
+            // Actualizar estadísticas cada 10 segundos
+            setInterval(updateStats, 10000);
+        });
+
+        // Función para crear efecto de confeti
+        function createConfetti() {
+            const colors = ['#0b67d0', '#00b67a', '#ff9800', '#f44336', '#9C27B0', '#FFC107'];
+            for (let i = 0; i < 25; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.left = '50%';
+                confetti.style.top = '70px';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.zIndex = '1000';
+                confetti.style.setProperty('--tx', `${Math.random() * 300 - 150}px`);
+                confetti.style.animation = `confetti-fall ${Math.random() * 2 + 1}s ease-out forwards`;
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 2000);
+            }
+        }
+
+        // Función para simular efectos de sonido
+        function playSound(type) {
+            // En una aplicación real, aquí se reproducirían sonidos
+            console.log(`Playing sound: ${type}`);
+        }
+
+        // Función para mostrar resultados de búsqueda
+        function showSearchResults(count, term) {
+            // En una aplicación real, aquí se mostraría un mensaje con los resultados
+            if (term.length > 0) {
+                console.log(`Found ${count} results for "${term}"`);
+            }
+        }
+
+        // Funciones para los botones de acción
+        function showAllServices() {
+            alert('Mostrando todos los servicios...');
+            // En una aplicación real, aquí se navegaría a la pantalla de servicios
+        }
+
+        function showAllNotifications() {
+            alert('Mostrando todas las notificaciones...');
+            // En una aplicación real, aquí se navegaría a la pantalla de notificaciones
+        }
+
+        function showAllTramites() {
+            alert('Mostrando todos los trámites...');
+            // En una aplicación real, aquí se navegaría a la pantalla de trámites
+        }
+
+        function filterModules(category) {
+            alert(`Filtrando módulos de: ${category}`);
+            // En una aplicación real, aquí se filtrarían los módulos por categoría
+        }
+
+        // Función para abrir módulos
+        window.openModule = function(moduleKey) {
+            const moduleNames = {
+                'municipal': 'Municipal',
+                'denuncias': 'Denuncias',
+                'organizaciones': 'Organizaciones',
+                'dirigentes': 'Dirigentes',
+                'fonos': 'Emergencias',
+                'cultura': 'Cultura',
+                'biblioteca': 'Biblioteca',
+                'rutaTesoro': 'Ruta del Tesoro',
+                'turismo': 'Turismo',
+                'marketplace': 'Marketplace',
+                'mercado': 'Mercado',
+                'feria': 'Feria',
+                'delivery': 'Delivery',
+                'pagos': 'Pagos',
+                'transporte': 'Transporte',
+                'voluntariado': 'Voluntariado',
+                'huertas': 'Huertas',
+                'adultomayor': 'Adulto Mayor',
+                'ia': 'Asistente IA',
+                'ar': 'AR Turismo',
+                'analitica': 'Analítica',
+                'identidad': 'Identidad'
+            };
+            
+            const moduleName = moduleNames[moduleKey] || moduleKey;
+            
+            // Simular carga del módulo
+            const button = event.currentTarget;
+            button.classList.add('loading');
+            
+            setTimeout(() => {
+                button.classList.remove('loading');
+                alert(`Abriendo módulo: ${moduleName}\n\nEsta funcionalidad está en desarrollo.`);
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
