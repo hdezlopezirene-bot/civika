@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SuperApp Municipal - Mi Comuna</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #004a99;
+            --primary-light: #4d94ff;
+            --secondary: #00a859;
+            --secondary-dark: #008744;
+            --accent: #ff6b35;
+            --warning: #ff9800;
+            --danger: #e53935;
+            --success: #4caf50;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-bg: #ffffff;
+            --card-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            --card-shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-dark: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Header mejorado */
+        .app-header {
+            background: var(--gradient-primary);
+            padding: 15px 20px 10px;
+            color: white;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 102, 204, 0.2);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-logo {
+            width: 42px;
+            height: 42px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-title h1 {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .app-title p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-badge {
+            position: relative;
+            font-size: 20px;
+        }
+
+        .badge-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
+        /* Search bar mejorada */
+        .search-container {
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-xl);
+            padding: 12px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-icon {
+            color: var(--gray);
+            margin-right: 10px;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            flex: 1;
+            font-size: 14px;
+            color: var(--dark);
+        }
+
+        .search-input::placeholder {
+            color: var(--gray);
+        }
+
+        /* Quick actions */
+        .quick-actions {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 20%;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 10px 5px;
+            border-radius: var(--radius-md);
+        }
+
+        .quick-action:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .action-name {
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            color: white;
+        }
+
+        /* Main content */
+        .main-content {
+            padding: 20px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .section-title a {
+            font-size: 14px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Servicios principales */
+        .main-services {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--light-gray);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .service-icon.tramites { background: linear-gradient(135deg, #2196F3, #21CBF3); }
+        .service-icon.certificados { background: linear-gradient(135deg, #4CAF50, #8BC34A); }
+        .service-icon.licencias { background: linear-gradient(135deg, #FF9800, #FFC107); }
+        .service-icon.permisos { background: linear-gradient(135deg, #9C27B0, #E91E63); }
+        .service-icon.pagos { background: linear-gradient(135deg, #0066cc, #4d94ff); }
+        .service-icon.impuestos { background: linear-gradient(135deg, #F44336, #FF9800); }
+        .service-icon.multas { background: linear-gradient(135deg, #795548, #9E9E9E); }
+        .service-icon.denuncias { background: linear-gradient(135deg, #607D8B, #9E9E9E); }
+        .service-icon.emergencias { background: linear-gradient(135deg, #F44336, #FF5252); }
+
+        .service-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Categorías de servicios */
+        .categories-container {
+            margin-bottom: 25px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 20px 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--light-gray);
+        }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .category-icon.trabajo { background: linear-gradient(135deg, #2196F3, #03A9F4); }
+        .category-icon.salud { background: linear-gradient(135deg, #4CAF50, #8BC34A); }
+        .category-icon.educacion { background: linear-gradient(135deg, #FF9800, #FFC107); }
+        .category-icon.deportes { background: linear-gradient(135deg, #F44336, #FF5252); }
+        .category-icon.cultura { background: linear-gradient(135deg, #9C27B0, #E91E63); }
+        .category-icon.turismo { background: linear-gradient(135deg, #00BCD4, #0097A7); }
+
+        .category-info h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .category-info p {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Trámites rápidos */
+        .quick-tramites {
+            margin-bottom: 25px;
+        }
+
+        .tramites-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tramite-item {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--light-gray);
+        }
+
+        .tramite-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .tramite-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            margin-right: 15px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+
+        .tramite-details {
+            flex: 1;
+        }
+
+        .tramite-details h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .tramite-details p {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .tramite-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .status-pending { background: #FFF3E0; color: #EF6C00; }
+        .status-in-progress { background: #E3F2FD; color: #1565C0; }
+        .status-completed { background: #E8F5E9; color: #2E7D32; }
+
+        /* Noticias y alertas */
+        .news-alerts {
+            margin-bottom: 25px;
+        }
+
+        .alert-card {
+            background: linear-gradient(135deg, #FFF3E0, #FFECB3);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            display: flex;
+            align-items: flex-start;
+            border-left: 4px solid var(--warning);
+            margin-bottom: 15px;
+        }
+
+        .alert-icon {
+            color: var(--warning);
+            font-size: 20px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .alert-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .alert-content p {
+            font-size: 13px;
+            color: #5D4037;
+        }
+
+        .news-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 15px;
+        }
+
+        .news-image {
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .news-content {
+            padding: 15px;
+        }
+
+        .news-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .news-content p {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
+        .news-date {
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        /* Bottom navigation */
+        .bottom-nav {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--light-gray);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            flex: 1;
+            max-width: 20%;
+        }
+
+        .nav-item:hover {
+            background: var(--light-gray);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item.active .nav-icon {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            color: var(--gray);
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* Login screen (inicialmente oculto) */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            transition: opacity 0.5s ease;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .login-title p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border-radius: var(--radius-md);
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            color: var(--gray);
+            font-size: 18px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .forgot-password a {
+            color: white;
+            font-size: 14px;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        .forgot-password a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        /* Modal de servicio */
+        .service-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .service-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 450px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            transform: translateY(30px);
+            transition: transform 0.4s ease;
+        }
+
+        .service-modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .close-modal {
+            font-size: 20px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .main-services {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de login (inicial) -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-logo">MC</div>
+        <div class="login-title">
+            <h1>SuperApp Municipal</h1>
+            <p>Tu comuna conectada en un solo lugar</p>
+        </div>
+        <div class="login-form">
+            <div class="input-group">
+                <label for="username">Usuario</label>
+                <div class="input-icon"><i class="fas fa-user"></i></div>
+                <input type="text" id="username" placeholder="Ingresa tu usuario">
+            </div>
+            <div class="input-group">
+                <label for="password">Contraseña</label>
+                <div class="input-icon"><i class="fas fa-lock"></i></div>
+                <input type="password" id="password" placeholder="Ingresa tu contraseña">
+            </div>
+            <button class="login-btn" id="loginBtn">Iniciar Sesión</button>
+            <div class="forgot-password">
+                <a href="#" id="forgotPassword">¿Olvidaste tu contraseña?</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- App principal (inicialmente oculta) -->
+    <div class="app-container" id="appContainer" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-top">
+                <div class="logo-container">
+                    <div class="app-logo">MC</div>
+                    <div class="app-title">
+                        <h1>SuperApp Municipal</h1>
+                        <p>Bienvenido, Ciudadano</p>
+                    </div>
+                </div>
+                <div class="user-menu">
+                    <div class="notification-badge">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge-count">3</span>
+                    </div>
+                    <div class="user-avatar" id="userMenuBtn">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Barra de búsqueda -->
+            <div class="search-container">
+                <div class="search-bar">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Buscar servicios o información...">
+                </div>
+            </div>
+            
+            <!-- Acciones rápidas -->
+            <div class="quick-actions">
+                <div class="quick-action" data-service="pagos">
+                    <div class="action-icon"><i class="fas fa-credit-card"></i></div>
+                    <div class="action-name">Pagar</div>
+                </div>
+                <div class="quick-action" data-service="tramites">
+                    <div class="action-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="action-name">Trámites</div>
+                </div>
+                <div class="quick-action" data-service="permisos">
+                    <div class="action-icon"><i class="fas fa-clipboard-check"></i></div>
+                    <div class="action-name">Permisos</div>
+                </div>
+                <div class="quick-action" data-service="reportes">
+                    <div class="action-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="action-name">Reportar</div>
+                </div>
+                <div class="quick-action" data-service="licencias">
+                    <div class="action-icon"><i class="fas fa-id-card"></i></div>
+                    <div class="action-name">Licencias</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <!-- Servicios principales -->
+            <section class="services-section">
+                <div class="section-title">
+                    <h2>Servicios Principales</h2>
+                    <a href="#">Ver todos</a>
+                </div>
+                <div class="main-services">
+                    <div class="service-card" data-service="tramites">
+                        <div class="service-icon tramites"><i class="fas fa-file-contract"></i></div>
+                        <div class="service-name">Trámites</div>
+                    </div>
+                    <div class="service-card" data-service="certificados">
+                        <div class="service-icon certificados"><i class="fas fa-certificate"></i></div>
+                        <div class="service-name">Certificados</div>
+                    </div>
+                    <div class="service-card" data-service="licencias">
+                        <div class="service-icon licencias"><i class="fas fa-id-card"></i></div>
+                        <div class="service-name">Licencias</div>
+                    </div>
+                    <div class="service-card" data-service="permisos">
+                        <div class="service-icon permisos"><i class="fas fa-clipboard-check"></i></div>
+                        <div class="service-name">Permisos</div>
+                    </div>
+                    <div class="service-card" data-service="pagos">
+                        <div class="service-icon pagos"><i class="fas fa-credit-card"></i></div>
+                        <div class="service-name">Pagos</div>
+                    </div>
+                    <div class="service-card" data-service="impuestos">
+                        <div class="service-icon impuestos"><i class="fas fa-file-invoice-dollar"></i></div>
+                        <div class="service-name">Impuestos</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categorías de servicios -->
+            <section class="categories-container">
+                <div class="section-title">
+                    <h2>Categorías de Servicios</h2>
+                    <a href="#">Explorar</a>
+                </div>
+                <div class="categories-grid">
+                    <div class="category-card" data-category="trabajo">
+                        <div class="category-icon trabajo"><i class="fas fa-briefcase"></i></div>
+                        <div class="category-info">
+                            <h3>Trabajo</h3>
+                            <p>Ofertas laborales, capacitaciones</p>
+                        </div>
+                    </div>
+                    <div class="category-card" data-category="salud">
+                        <div class="category-icon salud"><i class="fas fa-heartbeat"></i></div>
+                        <div class="category-info">
+                            <h3>Salud</h3>
+                            <p>Consultorios, farmacias, urgencias</p>
+                        </div>
+                    </div>
+                    <div class="category-card" data-category="educacion">
+                        <div class="category-icon educacion"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="category-info">
+                            <h3>Educación</h3>
+                            <p>Escuelas, talleres, becas</p>
+                        </div>
+                    </div>
+                    <div class="category-card" data-category="deportes">
+                        <div class="category-icon deportes"><i class="fas fa-futbol"></i></div>
+                        <div class="category-info">
+                            <h3>Deportes</h3>
+                            <p>Canchas, talleres, eventos</p>
+                        </div>
+                    </div>
+                    <div class="category-card" data-category="cultura">
+                        <div class="category-icon cultura"><i class="fas fa-theater-masks"></i></div>
+                        <div class="category-info">
+                            <h3>Cultura</h3>
+                            <p>Eventos, talleres, biblioteca</p>
+                        </div>
+                    </div>
+                    <div class="category-card" data-category="turismo">
+                        <div class="category-icon turismo"><i class="fas fa-map-marked-alt"></i></div>
+                        <div class="category-info">
+                            <h3>Turismo</h3>
+                            <p>Lugares, rutas, eventos</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trámites rápidos -->
+            <section class="quick-tramites">
+                <div class="section-title">
+                    <h2>Trámites Rápidos</h2>
+                    <a href="#">Ver todos</a>
+                </div>
+                <div class="tramites-list">
+                    <div class="tramite-item" data-tramite="licencia-conducir">
+                        <div class="tramite-icon"><i class="fas fa-id-card"></i></div>
+                        <div class="tramite-details">
+                            <h4>Licencia de Conducir</h4>
+                            <p>Renovación de licencia de conducir</p>
+                        </div>
+                        <div class="tramite-status status-in-progress">En Proceso</div>
+                    </div>
+                    <div class="tramite-item" data-tramite="permiso-construccion">
+                        <div class="tramite-icon"><i class="fas fa-home"></i></div>
+                        <div class="tramite-details">
+                            <h4>Permiso de Construcción</h4>
+                            <p>Solicitud de permiso de construcción menor</p>
+                        </div>
+                        <div class="tramite-status status-pending">Pendiente</div>
+                    </div>
+                    <div class="tramite-item" data-tramite="certificado-residencia">
+                        <div class="tramite-icon"><i class="fas fa-file-certificate"></i></div>
+                        <div class="tramite-details">
+                            <h4>Certificado de Residencia</h4>
+                            <p>Solicitud de certificado de residencia</p>
+                        </div>
+                        <div class="tramite-status status-completed">Completado</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Noticias y alertas -->
+            <section class="news-alerts">
+                <div class="section-title">
+                    <h2>Noticias y Alertas</h2>
+                    <a href="#">Ver todas</a>
+                </div>
+                
+                <div class="alert-card">
+                    <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="alert-content">
+                        <h4>Corte de Agua Programado</h4>
+                        <p>Este viernes 15 de 9:00 a 14:00 hrs en sector centro. Toma tus previsiones.</p>
+                    </div>
+                </div>
+                
+                <div class="news-card">
+                    <div class="news-image">
+                        Feria de Empleo Municipal
+                    </div>
+                    <div class="news-content">
+                        <h4>Feria de Empleo este sábado</h4>
+                        <p>Participa en la feria de empleo municipal con más de 50 empresas ofertando puestos de trabajo.</p>
+                        <div class="news-date">Publicado hace 2 días</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Navegación inferior -->
+        <nav class="bottom-nav">
+            <div class="nav-item active">
+                <i class="fas fa-home nav-icon"></i>
+                <div class="nav-label">Inicio</div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-compass nav-icon"></i>
+                <div class="nav-label">Explorar</div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-file-alt nav-icon"></i>
+                <div class="nav-label">Trámites</div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-bell nav-icon"></i>
+                <div class="nav-label">Alertas</div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-user nav-icon"></i>
+                <div class="nav-label">Perfil</div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Modal de servicio (genérico) -->
+    <div class="service-modal" id="serviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Servicio Municipal</h3>
+                <div class="close-modal" id="closeModalBtn">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Contenido dinámico del modal -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos del DOM
+            const loginScreen = document.getElementById('loginScreen');
+            const appContainer = document.getElementById('appContainer');
+            const loginBtn = document.getElementById('loginBtn');
+            const forgotPassword = document.getElementById('forgotPassword');
+            const serviceCards = document.querySelectorAll('.service-card, .quick-action, .category-card, .tramite-item');
+            const serviceModal = document.getElementById('serviceModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            
+            // Datos de servicios
+            const servicesData = {
+                'tramites': {
+                    title: 'Trámites Municipales',
+                    content: `
+                        <h4>Realiza tus trámites en línea</h4>
+                        <p>Accede a todos los trámites municipales disponibles de forma digital:</p>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li>Certificados de residencia</li>
+                            <li>Permisos de circulación</li>
+                            <li>Licencias comerciales</li>
+                            <li>Permisos de construcción</li>
+                            <li>Y muchos más...</li>
+                        </ul>
+                        <button class="login-btn" style="margin-top: 15px;">Iniciar Trámite</button>
+                    `
+                },
+                'pagos': {
+                    title: 'Pagos en Línea',
+                    content: `
+                        <h4>Paga tus servicios fácilmente</h4>
+                        <p>Realiza pagos de manera segura y rápida:</p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+                            <div style="background: #f0f7ff; padding: 15px; border-radius: 10px; text-align: center;">
+                                <i class="fas fa-file-invoice-dollar" style="font-size: 24px; color: var(--primary); margin-bottom: 10px;"></i>
+                                <div style="font-weight: 600;">Impuestos</div>
+                            </div>
+                            <div style="background: #f0f7ff; padding: 15px; border-radius: 10px; text-align: center;">
+                                <i class="fas fa-tint" style="font-size: 24px; color: var(--primary); margin-bottom: 10px;"></i>
+                                <div style="font-weight: 600;">Agua</div>
+                            </div>
+                            <div style="background: #f0f7ff; padding: 15px; border-radius: 10px; text-align: center;">
+                                <i class="fas fa-bolt" style="font-size: 24px; color: var(--primary); margin-bottom: 10px;"></i>
+                                <div style="font-weight: 600;">Luz</div>
+                            </div>
+                            <div style="background: #f0f7ff; padding: 15px; border-radius: 10px; text-align: center;">
+                                <i class="fas fa-car" style="font-size: 24px; color: var(--primary); margin-bottom: 10px;"></i>
+                                <div style="font-weight: 600;">Permisos</div>
+                            </div>
+                        </div>
+                        <button class="login-btn" style="margin-top: 10px;">Pagar Ahora</button>
+                    `
+                },
+                'licencias': {
+                    title: 'Licencias y Permisos',
+                    content: `
+                        <h4>Solicita tus licencias municipales</h4>
+                        <p>Gestiona todas tus licencias y permisos de forma digital:</p>
+                        <div style="margin: 15px 0;">
+                            <div style="display: flex; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px;">
+                                <i class="fas fa-id-card" style="color: var(--primary); margin-right: 15px; font-size: 20px;"></i>
+                                <div>
+                                    <div style="font-weight: 600;">Licencia de Conducir</div>
+                                    <div style="font-size: 12px; color: var(--gray);">Renovación y primera licencia</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px;">
+                                <i class="fas fa-store" style="color: var(--primary); margin-right: 15px; font-size: 20px;"></i>
+                                <div>
+                                    <div style="font-weight: 600;">Licencia Comercial</div>
+                                    <div style="font-size: 12px; color: var(--gray);">Apertura de negocios</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px;">
+                                <i class="fas fa-beer" style="color: var(--primary); margin-right: 15px; font-size: 20px;"></i>
+                                <div>
+                                    <div style="font-weight: 600;">Patente de Alcoholes</div>
+                                    <div style="font-size: 12px; color: var(--gray);">Venta de bebidas alcohólicas</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="login-btn">Solicitar Licencia</button>
+                    `
+                },
+                'reportes': {
+                    title: 'Reportar Problemas',
+                    content: `
+                        <h4>Reporta problemas en tu comuna</h4>
+                        <p>Ayuda a mejorar tu ciudad reportando problemas:</p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+                            <div style="background: #fff8e1; padding: 15px; border-radius: 10px; text-align: center; cursor: pointer;">
+                                <i class="fas fa-road" style="font-size: 24px; color: var(--warning); margin-bottom: 10px;"></i>
+                                <div style="font-weight: 600;">Calles</div>
+                            </div>
+                            <div style="background: #fff8e1; padding: 15px; border-radius: 10px; text-align: center; cursor: pointer;">
+                                <i class="fas fa-lightbulb" style="font-size: 24px; color: var(--warning); margin-bottom: 10px;"></i>
+                                <div style="font-weight: 600;">Alumbrado</div>
+                            </div>
+                            <div style="background: #fff8e1; padding: 15px; border-radius: 10px; text-align: center; cursor: pointer;">
+                                <i class="fas fa-tree" style="font-size: 24px; color: var(--warning); margin-bottom: 10px;"></i>
+                                <div style="font-weight: 600;">Áreas Verdes</div>
+                            </div>
+                            <div style="background: #fff8e1; padding: 15px; border-radius: 10px; text-align: center; cursor: pointer;">
+                                <i class="fas fa-trash" style="font-size: 24px; color: var(--warning); margin-bottom: 10px;"></i>
+                                <div style="font-weight: 600;">Basura</div>
+                            </div>
+                        </div>
+                        <button class="login-btn">Reportar Problema</button>
+                    `
+                },
+                'certificados': {
+                    title: 'Certificados Municipales',
+                    content: `
+                        <h4>Obtén tus certificados en línea</h4>
+                        <p>Certificados disponibles para solicitar:</p>
+                        <ul style="margin: 15px 0; padding-left: 20px;">
+                            <li>Certificado de Residencia</li>
+                            <li>Certificado de Antecedentes</li>
+                            <li>Certificado de No Adeudo</li>
+                            <li>Certificado de Soltería</li>
+                            <li>Certificado de Defunción</li>
+                        </ul>
+                        <button class="login-btn">Solicitar Certificado</button>
+                    `
+                }
+            };
+            
+            // Iniciar sesión
+            loginBtn.addEventListener('click', function() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (!username || !password) {
+                    alert('Por favor, ingresa usuario y contraseña');
+                    return;
+                }
+                
+                // Simular inicio de sesión
+                loginScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loginScreen.style.display = 'none';
+                    appContainer.style.display = 'block';
+                    
+                    // Animación de entrada
+                    appContainer.style.opacity = '0';
+                    appContainer.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        appContainer.style.transition = 'all 0.5s ease';
+                        appContainer.style.opacity = '1';
+                        appContainer.style.transform = 'translateY(0)';
+                    }, 50);
+                    
+                    // Mostrar notificación de bienvenida
+                    setTimeout(() => {
+                        alert(`¡Bienvenido a la SuperApp Municipal, ${username || 'Ciudadano'}!`);
+                    }, 500);
+                }, 500);
+            });
+            
+            // Recordar contraseña
+            forgotPassword.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Se ha enviado un enlace de recuperación a tu correo registrado.');
+            });
+            
+            // Abrir servicios desde tarjetas
+            serviceCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const serviceType = this.dataset.service || this.dataset.category || this.dataset.tramite;
+                    
+                    if (servicesData[serviceType]) {
+                        openServiceModal(serviceType);
+                    } else {
+                        // Para servicios sin datos específicos
+                        modalTitle.textContent = 'Servicio Municipal';
+                        modalBody.innerHTML = `
+                            <h4>Funcionalidad en desarrollo</h4>
+                            <p>Este servicio estará disponible próximamente.</p>
+                            <button class="login-btn" onclick="closeModal()">Cerrar</button>
+                        `;
+                        serviceModal.classList.add('active');
+                    }
+                });
+            });
+            
+            // Función para abrir modal de servicio
+            function openServiceModal(serviceKey) {
+                const service = servicesData[serviceKey];
+                modalTitle.textContent = service.title;
+                modalBody.innerHTML = service.content;
+                serviceModal.classList.add('active');
+                
+                // Agregar funcionalidad a los botones del modal
+                setTimeout(() => {
+                    const modalButtons = modalBody.querySelectorAll('button');
+                    modalButtons.forEach(btn => {
+                        if (btn.textContent.includes('Cerrar')) {
+                            btn.addEventListener('click', closeModal);
+                        } else {
+                            btn.addEventListener('click', function() {
+                                alert(`¡Funcionalidad "${service.title}" activada!`);
+                                closeModal();
+                            });
+                        }
+                    });
+                }, 100);
+            }
+            
+            // Cerrar modal
+            closeModalBtn.addEventListener('click', closeModal);
+            
+            // Cerrar modal al hacer clic fuera
+            serviceModal.addEventListener('click', function(e) {
+                if (e.target === serviceModal) {
+                    closeModal();
+                }
+            });
+            
+            function closeModal() {
+                serviceModal.classList.remove('active');
+            }
+            
+            // Menú de usuario
+            userMenuBtn.addEventListener('click', function() {
+                alert('Menú de usuario\n\n- Mi perfil\n- Mis trámites\n- Configuración\n- Cerrar sesión');
+            });
+            
+            // Navegación inferior
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const label = this.querySelector('.nav-label').textContent;
+                    if (label !== 'Inicio') {
+                        alert(`Navegando a: ${label}`);
+                    }
+                });
+            });
+            
+            // Barra de búsqueda
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const query = this.value.trim();
+                    if (query) {
+                        alert(`Buscando: "${query}"\n\nEsta funcionalidad está en desarrollo.`);
+                        this.value = '';
+                    }
+                }
+            });
+            
+            // Simular notificaciones periódicas
+            setInterval(() => {
+                const badgeCount = document.querySelector('.badge-count');
+                let currentCount = parseInt(badgeCount.textContent);
+                
+                // Ocasionalmente agregar una nueva notificación
+                if (Math.random() > 0.7) {
+                    currentCount += 1;
+                    badgeCount.textContent = currentCount;
+                    
+                    // Efecto visual
+                    badgeCount.style.transform = 'scale(1.3)';
+                    setTimeout(() => {
+                        badgeCount.style.transform = 'scale(1)';
+                    }, 300);
+                }
+            }, 30000);
+            
+            // Efectos de hover mejorados
+            const interactiveElements = document.querySelectorAll('.service-card, .category-card, .tramite-item, .quick-action');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                el.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
